@@ -1,11 +1,11 @@
-module half_adder(output S, C, input a, b);
-	assign S = a & b;
-	assign C = a ^ b;
+module half_adder(input din1, input din2, output sum, output cout)
+    assign sum = din1 ^ din2;
+    assign cout = din1 & din2;
 endmodule
 
-module full_adder(output S, C, input a, b, c);
-	assign S = a ^ b ^ c;
-	assign C = (a & b) | (a ^ b) & c;
+module full_adder(input din1, input din2, input cin, output sum, output cout) ;
+    assign sum = din1 ^ din2 ^ cin;
+    assign cout = (din1 & din2) | (din1 ^ din2) & cin;
 endmodule
 
 module ripple_adder(output [3:0]S, output C4, input [3:0] A,B, input C0);
@@ -46,7 +46,7 @@ module seven_seg(dout, din);
 		end					
 endmodule
 
-module rip(output [6:0]dout, output C4, input [3:0] A,B, input C0);
+module ripple_adder_with_seven_segment(output [6:0]dout, output C4, input [3:0] A,B, input C0);
 	wire [3:0]S;
 	ripple_adder(S[3:0], C4, A[3:0], B[3:0], C0);
 	seven_seg(dout[6:0], S[3:0]);	

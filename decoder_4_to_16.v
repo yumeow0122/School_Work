@@ -32,7 +32,7 @@ module decoder_3_to_8(input enable, input [2:0]din, output reg[7:0]dout);
 	end
 endmodule
 
-module decoder(input enable, input [3:0]din, output [15:0]dout);
+module decoder_4_to_16(input enable, input [3:0]din, output [15:0]dout);
 		wire [7:0] abc;
 		decoder_3_to_8(enable, {1'b0,din[1:0]}, abc);
 		decoder_2_to_4(abc[0], din[3:2], dout[3:0]);
