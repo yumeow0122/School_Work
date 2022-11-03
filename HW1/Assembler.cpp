@@ -10,10 +10,7 @@ struct Instruction{
   string target;
 };
 
-// first = address
-// second.first = label
-// second.second.first = operation
-// second.second.second = target
+
 class Assembler{
   Instruction instruction[1000];
   map <string, string> opcode;
@@ -45,7 +42,6 @@ public:
             temp != "BYTE" && temp != "WORD" &&
             temp != "RESW" && temp != "RESB"&&
             temp != "START" && temp != "END"){
-          if(i == 1) cout << "AR  " << temp << endl;
           if(!foundOpration) instruction[index].label = temp;
           else instruction[index].target = temp;
         }
@@ -84,16 +80,16 @@ public:
       string lastAddress = instruction[i-1].address;
       if(mnemonic == "BYTE"){
         int bytes;
-        string label2 =instruction[i-1].target;
-        char judgeChar = label2[0];
+        string lastTarget =instruction[i-1].target;
+        char judgeChar = lastTarget[0];
         if(judgeChar == 'C'){
-          bytes = label2.size() - 3;
+          bytes = lastTarget.size() - 3;
         }
         else{
-					if((label2.size() - 3) % 2 == 0)
-						bytes = (label2.size() -3) / 2;
+					if((lastTarget.size() - 3) % 2 == 0)
+						bytes = (lastTarget.size() -3) / 2;
 					else
-						bytes = ((label2.size() - 3) / 2) + 1;
+						bytes = ((lastTarget.size() - 3) / 2) + 1;
         }
         instruction[i].address = _hex_add_hex(lastAddress, to_string(bytes));
       }
