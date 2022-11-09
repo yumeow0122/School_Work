@@ -64,7 +64,7 @@ public:
   }
 
   string getOpcode(string ins){
-    if(opcode.find(ins) == opcode.end())
+    if(opcode.find(ins) == opcode.end())    //¨S§ä¨ì
       return "-1";
 
     return opcode[ins];
@@ -204,8 +204,9 @@ public:
   // 1 -> hex add hex
   // 0 -> dec add hex
   void generate_machine_code(){
+    ofstream out("output.txt");
     string _size = _dec_to_hex(_hex_to_dec(instruction[index-1].address) - _hex_to_dec(instruction[0].address));
-    cout << "H " << instruction[0].label << " " << instruction[0].address << " " << _size << endl;
+    out << "H" << instruction[0].label << "  " << instruction[0].address << "" << _size << endl;
     int i = 0, save = 1;
     while(1){
       int length = 0, codeLen = 0;
@@ -214,9 +215,9 @@ public:
       while(i<index-1 && object_code[i] != "" && codeLen < 30){
         length++;
         if(!printT && getOpcode(instruction[i].operation) != "-1"){
-          cout << "T ";
+          out << "T";
           printT = true;
-          cout << instruction[i].address << " ";
+          out << "00" <<instruction[i].address << "";
         }
 
         if(object_code[i] != ""){
@@ -233,15 +234,15 @@ public:
         save++;
         continue;
       }
-      cout << _dec_to_hex(codeLen) << " ";
+      out << _dec_to_hex(codeLen) << "";
       i = save;
       codeLen = 0;
       for(; codeLen < 30; i++){
         if(i >= index - 1) break;
         if(object_code[i] != ""){
           codeLen += (object_code[i].size() / 2);
-          if(codeLen > 30) break;
-          cout << object_code[i] << " ";
+        if(codeLen > 30) break;
+        out << object_code[i] << "";
         }
         else{
           i++;
@@ -250,11 +251,20 @@ public:
       }
       save = i;
       if(i >= index-1) break;
-      cout << endl;
+      out << endl;
     }
 
-    cout << endl << "E " << instruction[1].address << endl;
-
+    out << endl << "E" << "00" << instruction[1].address << endl;
+    out.close();
+    cout << "###" << "CONVERT SUCCESS" << "###" << endl << endl;
+    ifstream readFile("output.txt");
+    string line;
+    while(readFile)
+    {
+        line = readFile.get();
+        cout << line;
+    }
+    readFile.close();
   }
 
 private:
@@ -327,7 +337,11 @@ private:
   string _dec_to_hex(int num){
       stringstream stream;
       stream << hex << num;
-      return stream.str();
+      string out;
+      stream >> out;
+      transform(out.begin(), out.end(), out.begin(), ::toupper);
+      if(out.length()<2) out.insert(0,1,'0');
+      return out;
   }
 
   string _hex_add_hex(string hex1, string hex2){
