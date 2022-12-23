@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <sys/time.h>
 
@@ -10,7 +11,7 @@
 #define THREAD_NUM 4
 
 double matrix1[MAX][MAX], matrix2[MAX][MAX], matrix3[MAX][MAX];
-int row, col;
+int raw, col;
 
 void *multiply(void *arg)
 {
@@ -23,9 +24,9 @@ void *multiply(void *arg)
       for (j = 0; j < col; j++)
       {
          double sum = 0;
-         for (k = 0; k < row; k++)
+         for (k = 0; k < raw; k++)
          {
-            sum += matrix1[i][k] * matrix2[j][k];
+            sum += matrix1[i][k] * matrix2[k][j];
          }
          matrix3[i][j] = sum;
       }
@@ -51,10 +52,12 @@ int main()
    }
 
    gettimeofday(&tp_s, &tzp_s);
-   for (x = 0; x < 1000; x++)
+   for (x = 0; x < 1; x++)
    {
       sprintf(infilename, "./input/in%d.txt", x + 1);
       sprintf(outfilename, "./thread/out%d.txt", x + 1);
+      //sprintf(infilename, "./test.in");
+      //sprintf(outfilename, "./test.out");
 
       if ((infile = fopen(infilename, "r")) == NULL)
          perror("in open error~\n");
