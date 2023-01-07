@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="index.xslt"?>
+<index>
+   <page>
+         <title>pxmart</title>
+         <name>./pxmart/pxmart.xml</name>
+   </page>
+
+   <page>
+      <title>7-11</title>
+      <name>./711/711.xml</name>
+   </page>
+</index>

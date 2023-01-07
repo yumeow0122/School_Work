@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xslt/kiwi.xslt"?>
+
+<data>
+   <nav>
+         <title>pxmart</title>
+         <name>../pxmart.xml</name>
+   </nav>
+
+   <nav>
+      <title>7-11</title>
+      <name>../../711/711.xml</name>
+   </nav>
+
+   <introduction>
+     <detail>
+      奇異果，又稱獼猴桃、獼猴梨、藤梨、毛梨、羊桃、陽桃、幾維果、木子、毛木果等，是獼猴桃屬多種木質攀緣植物的可食用漿果。最常見的獼猴桃品種是橢圓形，
+     </detail>
+ 
+     <detail>
+      大小約為一顆大型雞蛋，長度為5-8厘米，直徑為4.5-5.5厘米。奇異果的果皮呈纖維狀、顏色為暗綠色或棕色，而果肉是鮮綠色或金色，內有可食用的黑色種子。
+   </detail>
+   </introduction>
+ 
+   <nutrition>
+     <detail>
+      熱量 (kcal) 60
+     </detail>
+ 
+     <detail>
+      脂肪 0.5 g
+     </detail>
+ 
+     <detail>
+      膳食纖維 3 g
+     </detail>
+ 
+     <detail>
+      碳水化合物 15 g
+     </detail>
+   </nutrition>
+ </data>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xslt/banana.xslt"?>
+
+<data>
+   <nav>
+         <title>pxmart</title>
+         <name>../../pxmart/pxmart.xml</name>
+   </nav>
+
+   <nav>
+      <title>7-11</title>
+      <name>../711.xml</name>
+   </nav>
+
+  <introduction>
+    <detail>
+      OPEN小將最好的朋友，生日本來是為11月7日，但聽說是和LOCK小醬同一天後就決定把生日改成7月12日了[1]，尾巴是關東煮的形狀，喜歡吃關東煮，烹飪的功夫很好，願望是當一個廚師。</detail>
+  </introduction>
+</data>

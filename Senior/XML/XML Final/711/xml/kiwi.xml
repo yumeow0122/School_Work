@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xslt/kiwi.xslt"?>
+
+<data>
+   <nav>
+      <title>pxmart</title>
+      <name>../../pxmart/pxmart.xml</name>
+   </nav>
+
+   <nav>
+      <title>7-11</title>
+      <name>../711.xml</name>
+   </nav>
+
+  <introduction>
+    <detail>
+      小桃（可卡狗）(モモ) 生日3月3日：是一隻超可愛的粉紅色可卡狗，很有錢，愛吃水蜜桃。在看到OPEN小將的第一眼後便開始暗戀他，願望是成為OPEN小將的新娘，一起住在很大的城堡。
+    </detail>
+  </introduction>
+</data>

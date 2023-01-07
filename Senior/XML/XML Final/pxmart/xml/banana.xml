@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xslt/banana.xslt"?>
+<data>
+   <nav>
+         <title>pxmart</title>
+         <name>../pxmart.xml</name>
+   </nav>
+
+   <nav>
+      <title>7-11</title>
+      <name>../../711/711.xml</name>
+   </nav>
+
+  <introduction>
+    <detail>
+      香蕉，又名甘蕉、芎蕉、芽蕉，弓蕉，為芭蕉科芭蕉屬小果野蕉及野蕉的自然或人工雜交的栽培種，為多年生草本植物。果實長有棱；果皮黃色或綠色，果肉白色，
+    </detail>
+
+    <detail>
+      味道香甜。主要生長於熱帶、亞熱帶地區。原產於亞洲東南部熱帶、亞熱帶地區。
+    </detail>
+  </introduction>
+
+  <nutrition>
+    <detail>
+      熱量 (kcal) 88
+    </detail>
+
+    <detail>
+      脂肪 0.3 g
+    </detail>
+
+    <detail>
+      膳食纖維 2.6 g
+    </detail>
+
+    <detail>
+      碳水化合物 14 g
+    </detail>
+  </nutrition>
+</data>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="pxmart.xslt"?>
+<index>
+   <nav>
+         <title>pxmart</title>
+         <name>../pxmart/pxmart.xml</name>
+   </nav>
+
+   <nav>
+      <title>7-11</title>
+      <name>../711/711.xml</name>
+   </nav>
+
+   <page>
+	      <title>蘋狗</title>
+	      <name>./xml/apple.xml</name>
+   </page>
+   
+	<page>
+	      <title>奇異狗</title>
+	      <name>./xml/kiwi.xml</name>
+   </page>
+
+	<page>
+	      <title>香蕉狗</title>
+	      <name>./xml/banana.xml</name>
+   </page>
+</index>
