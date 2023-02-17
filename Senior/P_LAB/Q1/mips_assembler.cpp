@@ -4,6 +4,10 @@ using namespace std;
 
 class Assembler
 {
+    const int R = 0;
+    const int I = 1;
+    const int J = 2;
+
     map<string, int> type;
     map<string, string> opc;
     map<string, string> reg;
@@ -19,54 +23,59 @@ public:
         _buildShamt();
         _buildFunct();
     }
-
-    void assemble(string code)
+    
+    string assemble(vector<string> args)
     {
-        string tmp;
-        string ope;
-        int format;
-        bool isOpe = true;
-        vector<string> inputReg;
-        for (int cur = 0; cur < code.size(); cur++)
+        string res;
+        string ope = args[0];
+        if (type[ope] == R)
         {
-            if (code[cur] == ' ')
+            string rd = args[1], rs = args[2], rt = args[3];
+            res += opc[ope];
+            res += reg[rs];
+            res += reg[rt];
+            res += reg[rd];
+            res += shamt[ope];
+            res += funct[ope];
+        }
+        else if (type[ope] == I)
+        {
+            string rs = args[1], rt = args[2], imm = _toBinary(atoi(args[3].c_str()));
+            res += opc[ope];
+            res += reg[rs];
+            res += reg[rt];
+            res += imm;
+        }
+
+        return res;
+    }
+
+    vector<string> parse(string src)
+    {
+        vector<string> args;
+        string tmp;
+        bool isOpe = true;
+        for (int cur = 0; cur < src.size(); cur++)
+        {
+            if (src[cur] == ' ')
             {
                 if (isOpe)
                 {
                     isOpe = false;
-                    ope = tmp;
-                    format = type[ope];
-                    cout << opc[ope];
+                    args.push_back(tmp);
                 }
                 else
                 {
                     tmp = tmp.substr(0, 3);
-                    inputReg.push_back(tmp);
+                    args.push_back(tmp);
                 }
                 tmp.clear();
                 cur++;
             }
-            tmp += code[cur];
+            tmp += src[cur];
         }
-
-        if (format == 0)
-        {
-            inputReg.push_back(tmp);
-
-            cout << reg[inputReg[1]];
-            cout << reg[inputReg[2]];
-            cout << reg[inputReg[0]];
-            cout << shamt[ope];
-            cout << funct[ope];
-        }
-        else if (format == 1)
-        {
-            string imm = _toBinary(atoi(tmp.c_str()));
-            cout << reg[inputReg[1]];
-            cout << reg[inputReg[0]];
-            cout << setw(16) << setfill('0') << imm;
-        }
-        cout << endl;
+        args.push_back(tmp);
+        return args;
     }
 
 private:
@@ -77,6 +86,11 @@ private:
         {
             res += (src % 2 == 0 ? "0" : "1");
             src /= 2;
+        }
+
+        while (res.size() < 16)
+        {
+            res += '0';
         }
         reverse(res.begin(), res.end());
         return res;
@@ -143,7 +157,10 @@ int main()
     char code[33];
     while (cin.getline(code, 33))
     {
-        assembler.assemble(code);
+        // assembler.assemble(code);
+        vector<string> args = assembler.parse(code);
+        string obj = assembler.assemble(args);
+        cout << obj << endl;
     }
 
     return 0;
