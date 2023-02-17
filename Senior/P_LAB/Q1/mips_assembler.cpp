@@ -78,6 +78,7 @@ private:
             res += (src % 2 == 0 ? "0" : "1");
             src /= 2;
         }
+        reverse(res.begin(), res.end());
         return res;
     }
 
@@ -109,7 +110,7 @@ private:
     {
         funct.insert({"add", "100000"});
         funct.insert({"sub", "100010"});
-        funct.insert({"or", "1000101"});
+        funct.insert({"or", "100101"});
         funct.insert({"and", "100100"});
     }
 
