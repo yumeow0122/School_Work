@@ -2,6 +2,6 @@
 
 int main()
 {
-    printf("Hello Linux!\n");
+    printf("Hello Make!\n");
     return 0;
 }

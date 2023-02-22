@@ -13,16 +13,16 @@ DEPS := ${OBJS:.o=.d}
 -include ${DEPS}
 
 shell: ${OBJS}
-	${CC} $^ -o bin/$@
+	${CC} $^ -o bin/$@ # ${LFLAGS}
 
 obj/%.o: src/%.c
-	${CC} ${CFLAGS} ${INC} -c -o $@ $<
+	${CC} ${CFLAGS} ${INC} -c -p $@ $<
 
 .PHONY:
 	depend clean all
 
 all:
-	./bin/shell
+	shell
 
 clean:
-	@rm bin/*.o obj/*.d
+	rm bin/*.o obj/*.d
