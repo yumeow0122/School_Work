@@ -1,27 +1,31 @@
 CC = gcc
+
 CFLAGS = -Wno-implicit-function-declaration -g -MD
 LFLAGS = -lreadline
 INC = -Iinclude
 
 SRCS = ${wildcard src/*.c}
-
-OBJS = ${patsubst src/%.c, obj/%.c, ${SRCS}}
+OBJS = ${patsubst src/%.c, obj/%.o, ${SRCS}}
 DEPENDS = ${wildcard include/*.h}
 DEPS := ${OBJS:.o=.d}
 
-.PHONY: depend clean all
-
-all: shell
 -include ${DEPS}
 
-shell: ${OBJS}
-	${CC} $^ -o bin/$@ ${LFLAGS}
+.PHONY: clean all exec
+
+shell: $(OBJS)
+	$(CC) $^ -o bin/$@
+	cp ./bin/shell ./
 
 obj/%.o: src/%.c
-	${CC} ${CFLAGS} ${INC} -c -o $@ $<
+	$(CC) $(CFLAG) $(INC) -c -o $@ $<
 
-.PHONY:
-	depend clean all
+# .PHONY
+all:
+	shell
 
 clean:
-	@rm -f bin/* obj/*.o obj/*.d
+	rm -f obj/*.o obj/*.d
+
+exec:
+	./bin/shell
