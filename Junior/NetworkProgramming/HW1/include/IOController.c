@@ -32,14 +32,3 @@ int command_parse(char *command, char **args)
     args[argc] = NULL;
     return argc;
 }
-
-int get_mode(int argc, char **args)
-{
-    if (argc > 1)
-    {
-        for (int i = 0; i < argc; i++)
-            if (strcmp(args[i], "|") == 0)
-                return 0;
-    }
-    return 1;
-}

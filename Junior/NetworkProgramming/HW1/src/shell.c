@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 
 #include "../include/IOController.c"
+#include "../include/commandController.c"
 
 #ifndef COMMAND_SIZE
 #define COMMAND_SIZE 5000
@@ -49,36 +50,6 @@ void end()
     printf("----- Shell End. -----\n");
 }
 
-void run_external(int argc, char **args)
-{
-    pid_t pid, wpid;
-    int status;
-
-    pid = fork();
-    if (pid == 0)
-    {
-        // Child process
-        if (execvp(args[0], args) == -1)
-        {
-            perror("external command eroor:");
-        }
-        exit(EXIT_FAILURE);
-    }
-    else if (pid < 0)
-    {
-        // Error forking
-        perror("external command eroor:");
-    }
-    else
-    {
-        // Parent process
-        do
-        {
-            wpid = waitpid(pid, &status, WUNTRACED);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-    }
-}
-
 int main(int argc, char *argv[])
 {
     char command[COMMAND_SIZE];
@@ -99,11 +70,11 @@ int main(int argc, char *argv[])
         int mode = get_mode(argc, args);
         if (mode == 0)
         {
-            printf("internal\n");
+            printf("pipe mode.\n");
         }
         else
         {
-            printf("external\n");
+            printf("non-pipe mode.\n");
             run_external(argc, args);
         }
     }
