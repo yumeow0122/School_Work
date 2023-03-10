@@ -10,31 +10,36 @@
 #define COMMAND_SIZE 5000
 #endif
 
-char existBin[100][100];
-char existBinCount = 0;
+char internal_command[100][100];
+int internal_command_count = 0;
+
+void set_internal_command()
+{
+    // scan the bin directory for executables, use it if exist, or else use the system executables.
+    DIR *d;
+    struct dirent *dir;
+    d = opendir("./bin");
+    if (d == NULL)
+        perror("Open Directory ERROR:");
+
+    while ((dir = readdir(d)) != NULL)
+    {
+        // type of file is regular
+        if (dir->d_type == DT_REG)
+        {
+            strcpy(internal_command[internal_command_count], dir->d_name);
+            internal_command_count++;
+        }
+    }
+    closedir(d);
+}
 
 void initial()
 {
     printf("Enter 'quit' to exit the shell.\n");
     printf("----- Shell Start. -----\n");
 
-    // scan the bin directory for executables, use it if exist, or else use the system executables.
-    DIR *d;
-    struct dirent *dir;
-    d = opendir("./bin");
-    if (d)
-    {
-        while ((dir = readdir(d)) != NULL)
-        {
-            if (dir->d_type == DT_REG)
-            {
-                strcpy(existBin[existBinCount], dir->d_name);
-                existBinCount++;
-                printf("%s\n", dir->d_name);
-            }
-        }
-        closedir(d);
-    }
+    set_internal_command();
 }
 
 void end()
@@ -74,8 +79,34 @@ int get_mode(int argc, char **args)
 {
 }
 
-void run(int argc, char **args)
+void run_external(int argc, char **args)
 {
+    pid_t pid, wpid;
+    int status;
+
+    pid = fork();
+    if (pid == 0)
+    {
+        // Child process
+        if (execvp(args[0], args) == -1)
+        {
+            perror("lsh");
+        }
+        exit(EXIT_FAILURE);
+    }
+    else if (pid < 0)
+    {
+        // Error forking
+        perror("lsh");
+    }
+    else
+    {
+        // Parent process
+        do
+        {
+            wpid = waitpid(pid, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
 }
 
 int main(int argc, char *argv[])
@@ -96,7 +127,7 @@ int main(int argc, char *argv[])
         int argc = command_parse(command, args);
 
         int mode = get_mode(argc, args);
-        run(argc, args);
+        run_external(argc, args);
     }
 
     end();
