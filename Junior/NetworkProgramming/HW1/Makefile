@@ -5,15 +5,17 @@ INC = -Iinclude
 
 SRCS = ${wildcard src/*.c}
 
-OBJS = ${patsubst src/%.c, obj/%.o, ${SRCS}}
+OBJS = ${patsubst src/%.c, obj/%.c, ${SRCS}}
 DEPENDS = ${wildcard include/*.h}
-
 DEPS := ${OBJS:.o=.d}
 
+.PHONY: depend clean all
+
+all: shell
 -include ${DEPS}
 
 shell: ${OBJS}
-	${CC} $^ -o bin/$@
+	${CC} $^ -o bin/$@ ${LFLAGS}
 
 obj/%.o: src/%.c
 	${CC} ${CFLAGS} ${INC} -c -o $@ $<
@@ -21,8 +23,5 @@ obj/%.o: src/%.c
 .PHONY:
 	depend clean all
 
-all:
-	./bin/shell
-
 clean:
-	@rm bin/*.o obj/*.d
+	@rm -f bin/* obj/*.o obj/*.d
