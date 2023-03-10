@@ -11,7 +11,7 @@ DEPS := ${OBJS:.o=.d}
 
 -include ${DEPS}
 
-.PHONY: clean all exec
+.PHONY: clean all exec test
 
 shell: $(OBJS)
 	$(CC) $^ -o bin/$@
@@ -29,3 +29,6 @@ clean:
 
 exec:
 	./bin/shell
+
+test:
+	./bin/number
