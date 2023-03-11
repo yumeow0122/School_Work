@@ -3,54 +3,31 @@
 #include <string.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 
 #include "../include/IOController.c"
 #include "../include/commandController.c"
 
-#ifndef COMMAND_SIZE
-#define COMMAND_SIZE 5000
-#endif
-
-char internal_command[100][100];
-int internal_command_count = 0;
-
-void set_internal_command()
-{
-    // scan the bin directory for executables, use it if exist, or else use the system executables.
-    DIR *d;
-    struct dirent *dir;
-    d = opendir("./bin");
-    if (d == NULL)
-        perror("Open Directory ERROR:");
-
-    while ((dir = readdir(d)) != NULL)
-    {
-        // type of file is regular
-        if (dir->d_type == DT_REG)
-        {
-            strcpy(internal_command[internal_command_count], dir->d_name);
-            internal_command_count++;
-        }
-    }
-    closedir(d);
-}
-
 void initial()
 {
+    set_internal_command();
+
+    // set execute path to './bin'
+    setenv("PATH", "/bin:./bin", 1);
+
     printf("Enter 'quit' to exit the shell.\n");
     printf("----- Shell Start. -----\n");
-
-    set_internal_command();
 }
 
+void clear()
+{
+}
 void end()
 {
     printf("----- Shell End. -----\n");
+    clear();
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char **envp)
 {
     char command[COMMAND_SIZE];
 
@@ -67,16 +44,7 @@ int main(int argc, char *argv[])
         char **args = malloc(COMMAND_SIZE * sizeof(char *));
         int argc = command_parse(command, args);
 
-        int mode = get_mode(argc, args);
-        if (mode == 0)
-        {
-            printf("pipe mode.\n");
-        }
-        else
-        {
-            printf("non-pipe mode.\n");
-            run_external(argc, args);
-        }
+        run_command(argc, args, envp);
     }
 
     end();

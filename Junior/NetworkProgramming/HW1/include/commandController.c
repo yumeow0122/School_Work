@@ -1,43 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int get_mode(int argc, char **args)
-{
-    if (argc > 1)
-    {
-        for (int i = 0; i < argc; i++)
-            if (strcmp(args[i], "|") == 0)
-                return 0;
-    }
-    return 1;
-}
+#include "./commandJudger.c"
+#include "./commandRunner.c"
 
-void run_external(int argc, char **args)
-{
-    pid_t pid, wpid;
-    int status;
+#ifndef OUTPUT_SIZE
+#define OUTPUT_SIZE 50000
+#endif
 
-    pid = fork();
-    if (pid == 0)
+void run_command(int argc, char **args, char **envp)
+{
+    int curIdx = 0;
+    char *prevOutput;
+
+    if (strcmp(args[0], "printenv") == 0)
     {
-        // Child process
-        if (execvp(args[0], args) == -1)
+        // mode is '-1' when command is invalid
+        int mode = get_printenv_mode(argc, args);
+        if (mode == -1)
         {
-            perror("external command eroor:");
+            printf("printenv error: too many argument.\n");
+            return;
         }
-        exit(EXIT_FAILURE);
-    }
-    else if (pid < 0)
-    {
-        // Error forking
-        perror("external command eroor:");
-    }
-    else
-    {
-        // Parent process
-        do
-        {
-            wpid = waitpid(pid, &status, WUNTRACED);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        else if (mode == 0)
+            curIdx += 2;
+        else if (mode == 1)
+            curIdx += 3;
+
+        prevOutput = build_printenv_output(mode, argc, args, envp);
     }
 }
