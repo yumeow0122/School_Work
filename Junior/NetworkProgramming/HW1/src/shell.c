@@ -29,17 +29,13 @@ void end()
 
 int main(int argc, char *argv[], char **envp)
 {
-    char command[COMMAND_SIZE];
-
+    char *command;
+    malloc(COMMAND_SIZE * sizeof(char *));
     initial();
 
-    while ((1))
+    while (input(command))
     {
         // get input command and status code of command
-        int status = input(command);
-        if (status == -1)
-            break;
-
         // parse input command
         char **args = malloc(COMMAND_SIZE * sizeof(char *));
         int argc = command_parse(command, args);

@@ -9,10 +9,14 @@
 int input(char *command)
 {
     printf("%% ");
-    fgets(command, 5000, stdin);
+    if (fgets(command, 5000, stdin) == NULL)
+    {
+        printf("\n");
+        return 0;
+    }
     if (strcmp(command, "exit\n") == 0 || strcmp(command, "quit\n") == 0)
     {
-        return -1; // exit code
+        return 0; // exit code
     }
     return 1;
 }
