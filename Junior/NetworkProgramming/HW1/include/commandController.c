@@ -19,7 +19,7 @@ void run_command(int argc, char **args, char **envp)
         int mode = get_printenv_mode(argc, args);
         if (mode == -1)
         {
-            printf("printenv error: too many argument.\n");
+            printf("printenv: invalid argument.\n");
             return;
         }
         else if (mode == 0)
@@ -28,5 +28,24 @@ void run_command(int argc, char **args, char **envp)
             curIdx += 3;
 
         prevOutput = build_printenv_output(mode, argc, args, envp);
+    }
+    else if (strcmp(args[0], "setenv") == 0)
+    {
+        if (argc == 3)
+        {
+            setenv(args[1], args[2], 1);
+        }
+        else
+        {
+            printf("setenv: invalid argument.\n");
+        }
+        argc += 3;
+    }
+
+    int pipeCount = pipe_count(argc, args);
+    for (curIdx; curIdx < argc; curIdx++)
+    {
+        int isInternal = is_internal_commnad(args[curIdx]);
+        
     }
 }
