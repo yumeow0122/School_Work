@@ -52,8 +52,24 @@ char ***alloc_data(size_t xlen, size_t ylen, size_t zlen)
     return p;
 }
 
-void print_command(int argc, char ** args){
-    for(int i=0; i<argc; i++)
+void print_command(int argc, char **args)
+{
+    for (int i = 0; i < argc; i++)
         printf("%s ", args[i]);
     printf("\n");
+}
+
+// void print_command_error(int argc, char ** args){
+//     printf(" Unknown command: [ ");
+//     for(int i=0; i<argc; i++)
+//         printf("%s ", args[i]);
+//     printf("]\n");
+// }
+
+void print_command_error(char **args)
+{
+    printf(" Unknown command: [ ");
+    for (int i = 0; args[i] != NULL; i++)
+        printf("%s ", args[i]);
+    printf("]\n");
 }

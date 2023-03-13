@@ -17,8 +17,7 @@ void execute_command(int argc, char **args)
         // Child process
         if (execvp(args[0], args) == -1)
         {
-            printf("Unknown command: ");
-            print_command(argc, args);
+            print_command_error(args);
         }
         exit(EXIT_FAILURE);
     }
@@ -61,7 +60,10 @@ void multi_pipe(char ***cmd, int cmdc)
                 dup2(fd[1], 1);
             }
             close(fd[0]);
-            execvp((*cmd)[0], *cmd);
+            if (execvp((*cmd)[0], *cmd) == -1)
+            {
+                print_command_error(*cmd);
+            }
             exit(1);
         }
         else
