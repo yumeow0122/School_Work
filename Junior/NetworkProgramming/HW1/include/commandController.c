@@ -30,7 +30,9 @@ void run_command(int argc, char **args, char **envp, char **preArgs)
 
     if (pipeCount == 0)
     {
-        execute_command(argc, args);
+        int statusCode = execute_command(argc, args);
+        if(statusCode == 0)
+            numberPipe++;
         return;
     }
 

@@ -5,7 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-void execute_command(int argc, char **args)
+// execute code:
+// -1: fork error
+//  0: invalid command
+//  1: success
+int execute_command(int argc, char **args)
 {
     pid_t pid, wpid;
     int status;
@@ -17,6 +21,7 @@ void execute_command(int argc, char **args)
         if (execvp(args[0], args) == -1)
         {
             print_command_error(args);
+            return 0;
         }
         exit(EXIT_FAILURE);
     }
@@ -24,6 +29,7 @@ void execute_command(int argc, char **args)
     {
         // Error forking
         perror("command forking eroor:");
+        return -1;
     }
     else
     {
@@ -32,11 +38,12 @@ void execute_command(int argc, char **args)
         {
             wpid = waitpid(pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        return 1;
     }
 }
 
 // Function where the piped system commands is executed
-void multi_pipe(char ***cmd, int cmdc)
+int multi_pipe(char ***cmd, int cmdc)
 {
     int fd[2];
     pid_t pid;
@@ -49,6 +56,7 @@ void multi_pipe(char ***cmd, int cmdc)
         {
             perror("pipe fork error:");
             exit(1);
+            return -1;
         }
         else if (pid == 0)
         {
