@@ -30,6 +30,7 @@ int command_parse(char *command, char **args)
     arg = strtok(command, delim);
     while (arg != NULL)
     {
+        arg += '\0';
         args[argc++] = arg;
         arg = strtok(NULL, delim);
     }

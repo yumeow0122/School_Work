@@ -29,8 +29,8 @@ void end()
 
 int main(int argc, char *argv[], char **envp)
 {
-    char *command;
-    malloc(COMMAND_SIZE * sizeof(char *));
+    char *command = malloc(COMMAND_SIZE * sizeof(char *));
+
     initial();
 
     while (input(command))

@@ -11,7 +11,7 @@ DEPS := ${OBJS:.o=.d}
 
 -include ${DEPS}
 
-.PHONY: clean all exec test
+.PHONY: clean all exec test doitall
 
 shell: $(OBJS)
 	$(CC) $^ -o bin/$@
@@ -32,3 +32,8 @@ exec:
 
 test:
 	./bin/number
+
+doitall:
+	make clean
+	make
+	make exec
