@@ -52,19 +52,31 @@ char ***alloc_data(size_t xlen, size_t ylen, size_t zlen)
     return p;
 }
 
+void copyArgs(int argc, char **args, char **preArgs)
+{
+    for(int idx=0; idx<argc; idx++){
+        preArgs[idx] = strdup(args[idx]);
+    }
+}
+
+void freeArgs(char **pre) {
+    for (int i = 0; pre[i]!=NULL; i++) {
+        free(pre[i]);  // 釋放每個字串所使用的記憶體
+    }
+}
+
+void substr(char *dest, const char *src, unsigned int start, unsigned int cnt)
+{
+    strncpy(dest, src + start, cnt);
+    dest[cnt] = 0;
+}
+
 void print_command(int argc, char **args)
 {
     for (int i = 0; i < argc; i++)
         printf("%s ", args[i]);
     printf("\n");
 }
-
-// void print_command_error(int argc, char ** args){
-//     printf(" Unknown command: [ ");
-//     for(int i=0; i<argc; i++)
-//         printf("%s ", args[i]);
-//     printf("]\n");
-// }
 
 void print_command_error(char **args)
 {

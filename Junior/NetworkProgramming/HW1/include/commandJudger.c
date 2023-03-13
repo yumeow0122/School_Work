@@ -3,6 +3,9 @@
 #include <string.h>
 #include <dirent.h>
 
+#include "./util.c"
+
+
 char internal_commands[100][100];
 int internal_command_count = 0;
 
@@ -45,4 +48,16 @@ int pipe_count(int argc, char **args)
         if (strcmp(args[i], "|") == 0)
             pipeCount++;
     return pipeCount;
+}
+
+int number_pipe(int argc, char **args)
+{
+    int numberPipe = 0;
+    int len = strlen(args[argc-1]);
+    if(args[argc-1][0] == '|' && len > 1){
+        char *num = malloc(COMMAND_SIZE * sizeof(char));
+        substr(num, args[argc-1], 1, len-1);
+        return atoi(num);
+    }
+    return -1;
 }

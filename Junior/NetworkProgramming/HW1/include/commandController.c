@@ -12,16 +12,28 @@
 #define COMMAND_SIZE 5000
 #endif
 
-void run_command(int argc, char **args, char **envp)
+int numberPipe = -1;
+
+void run_command(int argc, char **args, char **envp, char **preArgs)
 {
     int pipeCount = pipe_count(argc, args);
+
+    int judgePipe = number_pipe(argc, args);
+    numberPipe = (numberPipe <= -1 || judgePipe > 0) ? judgePipe : numberPipe;
+    if (judgePipe != -1)
+    {
+        printf("store command\n");
+        freeArgs(preArgs);
+        copyArgs(argc, args, preArgs);
+        return;
+    }
+
     if (pipeCount == 0)
     {
         execute_command(argc, args);
         return;
     }
 
-    int notFirst = 1;
     int curCommandIdx = 0, cmdIdx = 0;
     char ***cmd = alloc_data(OUTPUT_SIZE, OUTPUT_SIZE, OUTPUT_SIZE);
 
@@ -39,3 +51,18 @@ void run_command(int argc, char **args, char **envp)
     multi_pipe(cmd, cmdIdx);
     free(cmd);
 }
+
+/*
+ls -al |2
+pre: ls -al |2
+
+ls
+
+number
+pre: ls -al | number
+cmd:
+
+ls -al
+number
+
+*/
