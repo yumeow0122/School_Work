@@ -18,13 +18,9 @@ void initial()
     printf("----- Shell Start. -----\n");
 }
 
-void clear()
-{
-}
 void end()
 {
     printf("----- Shell End. -----\n");
-    clear();
 }
 
 int main(int argc, char *argv[], char **envp)

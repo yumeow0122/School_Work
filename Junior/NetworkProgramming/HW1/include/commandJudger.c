@@ -46,26 +46,3 @@ int pipe_count(int argc, char **args)
             pipeCount++;
     return pipeCount;
 }
-
-int is_internal_commnad(char *arg)
-{
-    for (int i = 0; i < internal_command_count; i++)
-        if (strcmp(arg, internal_commands[i]) == 0)
-            return 1;
-    return 0;
-}
-
-int get_printenv_mode(int argc, char **args)
-{
-    // too many argument for printenv
-    if(argc > 2 && strcmp(args[2], "|") != 0)
-        return -1;
-
-    // normal format or with pipe
-    else if(argc < 2 || strcmp(args[1], "|") == 0)
-        return 0;
-
-    // to get specific value in env
-    else
-        return 1;
-}

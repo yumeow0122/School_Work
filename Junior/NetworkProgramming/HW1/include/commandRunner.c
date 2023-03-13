@@ -4,25 +4,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-// char *build_printenv_output(int mode, int argc, char **args, char **envp)
-// {
-//     char *prevOutput = malloc(OUTPUT_SIZE * sizeof(char));
-//     memset(prevOutput, 0, OUTPUT_SIZE);
-//     if (mode == 0)
-//     {
-//         for (char **env = envp; *env != NULL; env++)
-//         {
-//             strcat(prevOutput, *env);
-//             strcat(prevOutput, "\n");
-//         }
-//         prevOutput[strlen(prevOutput) - 1] = '\0';
-//     }
-//     else if (mode == 1)
-//     {
-//         strcat(prevOutput, getenv(args[1]));
-//     }
-//     return prevOutput;
-// }
+#include "./util.c"
 
 void execute_command(int argc, char **args)
 {
@@ -35,7 +17,8 @@ void execute_command(int argc, char **args)
         // Child process
         if (execvp(args[0], args) == -1)
         {
-            perror("command eroor:");
+            printf("Unknown command: ");
+            print_command(argc, args);
         }
         exit(EXIT_FAILURE);
     }
@@ -55,7 +38,7 @@ void execute_command(int argc, char **args)
 }
 
 // Function where the piped system commands is executed
-void pipelinec(char ***cmd, int cmdc)
+void multi_pipe(char ***cmd, int cmdc)
 {
     int fd[2];
     pid_t pid;
@@ -66,7 +49,7 @@ void pipelinec(char ***cmd, int cmdc)
         pipe(fd);
         if ((pid = fork()) == -1)
         {
-            perror("pipe fork:");
+            perror("pipe fork error:");
             exit(1);
         }
         else if (pid == 0)
@@ -90,47 +73,6 @@ void pipelinec(char ***cmd, int cmdc)
             cmd++;
         }
     }
-}
-
-// Function where the piped system commands is executed
-void pipeline(char ***cmd)
-{
-    printf("in\n");
-    int fd[2];
-    pid_t pid;
-    int fdd = 0; /* Backup */
-
-    while (*cmd != NULL)
-    {
-        printf("cur: %s\n", *cmd[0]);
-        pipe(fd);
-        if ((pid = fork()) == -1)
-        {
-            perror("pipe fork:");
-            exit(1);
-        }
-        else if (pid == 0)
-        {
-            // child
-            dup2(fdd, 0);
-            if (*(cmd + 1) != NULL)
-            {
-                dup2(fd[1], 1);
-            }
-            close(fd[0]);
-            execvp((*cmd)[0], *cmd);
-            exit(1);
-        }
-        else
-        {
-            // parent
-            wait(NULL);
-            close(fd[1]);
-            fdd = fd[0];
-            cmd++;
-        }
-    }
-    printf("end\n");
 }
 
 void single_pipe(char **parsed, char **parsedpipe)
