@@ -122,10 +122,7 @@ int main(int argc, char **argv, char **envp)
              *
              * Pipe all previous command output to the current command,
              * it doesn't take effect if there is no previous command output or the current command is not accept input.
-             */
-            char *currentCommand = malloc(MAX_COMMANDS_SIZE * sizeof(char));
-
-            /**
+             * 
              * Pipe counter:
              * 0: no pipe
              * 1: current command is piped
@@ -133,15 +130,14 @@ int main(int argc, char **argv, char **envp)
              */
             pipeCounter = (pipeCounter < 1) ? 0 : pipeCounter - 1;
 
+            int cnt = 0;
+            char **curCommand = malloc(MAX_COMMANDS_SIZE * sizeof(char*));
             while (i < splitedCommandCount && strstr(splitedCommand[i], "|") == NULL)
             {
-                strcat(currentCommand, splitedCommand[i]);
-                strcat(currentCommand, " ");
-                i++;
+                curCommand[cnt++] = splitedCommand[i++];
             }
 
-            // printf("currentCommand: %s\n", currentCommand);
-            run_command(currentCommand);
+            run_command(curCommand);
 
             /**
              * Check if the command contains pipe

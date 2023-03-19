@@ -16,7 +16,7 @@ int save_in;
  *
  * @param command command to run
  */
-int run_command(const char *command)
+int run_command(char **command)
 {
     int save_in;
     save_in = dup(STDIN_FILENO);
@@ -31,11 +31,7 @@ int run_command(const char *command)
     int link2[2];
     pid_t pid1, pid2;
     char tempBuffer[4096 + 1];
-    char *cpcommand = malloc(MAX_COMMANDS_SIZE * sizeof(char));
-    char **_command = malloc(MAX_COMMANDS_SIZE * sizeof(char *));
 
-    cpcommand = strdup(command);
-    command_parse(cpcommand, _command);
 
     if (pipe(link1) == -1)
         die("pipe1");
@@ -57,9 +53,9 @@ int run_command(const char *command)
         close(link1[WRITE_END]);
         close(link2[READ_END]);
 
-        execvp(_command[0], _command);
+        execvp(command[0], command);
         char *error = malloc(128 * sizeof(char));
-        strcpy(error, _command[0]);
+        strcpy(error, command[0]);
         strcat(error, ": command not found");
         die(error);
     }
@@ -109,5 +105,4 @@ int run_command(const char *command)
     }
     // return to the original stdin for parent process
     dup2(save_in, STDIN_FILENO);
-    free(cpcommand);
 }
