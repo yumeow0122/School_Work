@@ -7,7 +7,14 @@ int save_in;
 
 void sigpipe_handler(int signum)
 {
-  signal(SIGPIPE, sigpipe_handler);
+  /**
+   * When commaand not found or some error happen,
+   * second child try to write data to parent but it already close.
+   * 
+   * OS will genearate "SIGPIPE" and output something by default,
+   * use "signal(SIGPIPE, sigpipe_handler);"
+   * to make operation be "sigpipe_handler".
+  */
 }
 
 /**
@@ -85,8 +92,6 @@ int run_command(char **command)
       int nbytes = 0;
       while (0 != (nbytes = read(link2[READ_END], foo, sizeof(foo))))
       {
-        // printf("foo: ");
-        // printf("%.*s\n", nbytes, foo);
         memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
         strcat(previousCommandOutput, foo);
         memset(foo, 0, 4096);
@@ -104,7 +109,7 @@ int run_command(char **command)
 }
 
 /**
- * @brief run the setenv 
+ * @brief run the setenv
  * For the use of setenv system api,
  * only execute when the command length is correct
  *
