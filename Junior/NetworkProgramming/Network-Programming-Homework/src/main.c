@@ -147,6 +147,7 @@ int main(int argc, char **argv, char **envp)
       /**
        * Check if the command contains pipe
        * If present, save the output of the command to savedCommandOutput.
+       * If this is number-pipe, store the counter.
        */
       if (splitedCommand[i] != NULL)
       {

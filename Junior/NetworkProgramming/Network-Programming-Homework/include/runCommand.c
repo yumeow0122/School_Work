@@ -103,6 +103,14 @@ int run_command(char **command)
   dup2(save_in, STDIN_FILENO);
 }
 
+/**
+ * @brief run the setenv 
+ * For the use of setenv system api,
+ * only execute when the command length is correct
+ *
+ * @param splitedCommandCount command arguments count
+ * @param splitedCommand command arguments
+ */
 void run_setenv(int splitedCommandCount, char **splitedCommand)
 {
   if (splitedCommandCount < 3)
