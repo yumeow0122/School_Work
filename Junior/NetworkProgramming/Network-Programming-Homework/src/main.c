@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <dirent.h>
 #include <ctype.h>
+#include <stddef.h>
 
 #define PREVIOUS_COMMAND_OUTPUT_SIZE 32768
 #define die(e)                  \
@@ -14,8 +15,7 @@
     exit(EXIT_FAILURE);         \
   } while (0);
 
-char existBin[100][100];
-int existBinCount = 0;
+
 char previousCommandOutput[PREVIOUS_COMMAND_OUTPUT_SIZE];
 
 // use for number pipe
@@ -23,31 +23,15 @@ char savedCommandOutput[PREVIOUS_COMMAND_OUTPUT_SIZE];
 
 #include "../include/commandParse.c"
 #include "../include/runCommand.c"
+#include "../include/util.c"
 
 void init()
 {
   printf("Welcome to the shell!\n");
   printf("Type 'quit' or 'exit' to exit the shell.\n");
 
-  // scan the bin directory for executables, use it if exist, or else use the system executables.
-  DIR *d;
-  struct dirent *dir;
-  d = opendir("./bin");
-  if (d)
-  {
-    while ((dir = readdir(d)) != NULL)
-    {
-      if (dir->d_type == 8)
-      {
-        strcpy(existBin[existBinCount], dir->d_name);
-        existBinCount++;
-        // printf("%s\n", dir->d_name);
-      }
-    }
-    closedir(d);
-  }
   memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
-
+  build_exist_command();
   // mark this line if you want to use the system executables.
   setenv("PATH", "/bin:./bin", 1);
 }

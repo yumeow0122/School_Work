@@ -63,9 +63,11 @@ int run_command(char **command)
     close(link1[WRITE_END]);
     close(link2[READ_END]);
     execvp(command[0], command);
+
     char *error = malloc(128 * sizeof(char));
-    strcpy(error, command[0]);
-    strcat(error, ": command not found");
+    strcpy(error, "Unknown command: [");
+    strcat(error, command[0]);
+    strcat(error, "]");
     die(error);
   }
   else
