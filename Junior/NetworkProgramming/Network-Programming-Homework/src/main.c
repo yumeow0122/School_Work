@@ -68,24 +68,21 @@ int main(int argc, char **argv, char **envp)
     char **splitedCommand = malloc(MAX_COMMANDS_SIZE * sizeof(char *));
     int isInternalCommand = 0;
     int piped = 0;
-    printf("%s", "% ");
+    printf("%% ");
 
     if (fgets(command, MAX_COMMANDS_SIZE, stdin) == NULL)
     {
       printf("\n");
       return 0;
     }
-    if (strcmp(command, "\n") == 0)
-      continue;
-    int splitedCommandCount = command_parse(command, splitedCommand);
-    int currentCommandIndex = 0;
-    for (int i = 0; i < splitedCommandCount; i++)
-    {
-      trim_command(splitedCommand[i]);
-    }
 
+    int splitedCommandCount = command_parse(command, splitedCommand);
+    if (splitedCommandCount == 0)
+      continue;
+
+    int currentCommandIndex = 0;
     if (strcmp(splitedCommand[0], quit) == 0 || strcmp(splitedCommand[0], _exit) == 0)
-      return 0;
+      break;
 
     /**
      * Because the setenv in child process will not affect the parent process,
@@ -136,6 +133,7 @@ int main(int argc, char **argv, char **envp)
         setenv(splitedCommand[1], splitedCommand[2], 1);
       currentCommandIndex += 3;
     }
+    
     for (int i = currentCommandIndex; i < splitedCommandCount; i++)
     {
       // check if it is an internal command
@@ -225,10 +223,7 @@ int main(int argc, char **argv, char **envp)
     if (strlen(previousCommandOutput) > 0)
     {
       if (pipeCounter == 0)
-      {
         printf("%s\n", previousCommandOutput);
-        memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
-      }
       if (pipeCounter != 0 && !piped)
         printf("%s\n", previousCommandOutput);
       if (pipeCounter == 1)
@@ -236,6 +231,10 @@ int main(int argc, char **argv, char **envp)
         memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
         strcat(previousCommandOutput, savedCommandOutput);
         memset(savedCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
+      }
+      else
+      {
+        memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
       }
     }
     else
