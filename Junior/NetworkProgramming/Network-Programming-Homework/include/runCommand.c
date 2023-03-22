@@ -10,13 +10,14 @@ int save_in;
  * The first will fork to a child process to run the command which read the stdin from second child and produce stdout to parent.
  * The second process is also the child process, that generate stdin for first child process.
  * The last process is the parent process, it will read the stdout from the first child process.
- * 
+ *
  * link1: write echo output to command stdin  (child2 -> child1)
  * link2: read command output to parent stdin (child1 -> parent)
- * 
+ *
  * @param command command to run
  */
-int run_command(const char *command) {
+int run_command(const char *command)
+{
   int save_in;
   save_in = dup(STDIN_FILENO);
 
@@ -37,7 +38,6 @@ int run_command(const char *command) {
   strcpy(cpcommand, command);
   command_parse(cpcommand, _command);
 
-
   if (pipe(link1) == -1)
     die("pipe1");
   if (pipe(link2) == -1)
@@ -46,7 +46,8 @@ int run_command(const char *command) {
   if ((pid1 = fork()) == -1)
     die("fork1");
 
-  if(pid1 == 0) {
+  if (pid1 == 0)
+  {
     // child 1
     dup2(link1[READ_END], STDIN_FILENO);
     dup2(link2[WRITE_END], STDOUT_FILENO);
@@ -57,33 +58,43 @@ int run_command(const char *command) {
     strcpy(error, _command[0]);
     strcat(error, ": command not found");
     die(error);
-  } else {
+  }
+  else
+  {
     if ((pid2 = fork()) == -1)
       die("fork2");
-    if(pid2 == 0) {
+    if (pid2 == 0)
+    {
       // child 2
       dup2(link1[WRITE_END], STDOUT_FILENO);
       close(link1[READ_END]);
       close(link2[READ_END]);
       close(link2[WRITE_END]);
-      execl("./bin/echo", "-e", currentCommandOutput, (char *)0);
-      die("echo: command not found");
-    }else {
+
+      // Use printf to output the currentCommandOutput with "-e" flag
+      printf("%s", currentCommandOutput);
+      fflush(stdout);
+      exit(0);
+    }
+    else
+    {
       // parent
       dup2(link2[READ_END], STDIN_FILENO);
       close(link1[READ_END]);
       close(link1[WRITE_END]);
       close(link2[WRITE_END]);
       int nbytes = 0;
-      while(0 != (nbytes = read(link2[READ_END], foo, sizeof(foo)))) {
-        //printf("foo: ");
-        //printf("%.*s\n", nbytes, foo);
+      while (0 != (nbytes = read(link2[READ_END], foo, sizeof(foo))))
+      {
+        // printf("foo: ");
+        // printf("%.*s\n", nbytes, foo);
         memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
         strcat(previousCommandOutput, foo);
         memset(foo, 0, 4096);
       }
       // remove the last line break
-      if(strcmp(&previousCommandOutput[strlen(previousCommandOutput) - 1], "\n") == 0) previousCommandOutput[strlen(previousCommandOutput) - 1] = '\0';
+      if (strcmp(&previousCommandOutput[strlen(previousCommandOutput) - 1], "\n") == 0)
+        previousCommandOutput[strlen(previousCommandOutput) - 1] = '\0';
       wait(NULL);
     }
     wait(NULL);
