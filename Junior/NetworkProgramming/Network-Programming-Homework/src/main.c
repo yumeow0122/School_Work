@@ -176,7 +176,6 @@ int main(int argc, char **argv, char **envp)
      * 1: next command is piped
      * >1: ignore
      */
-    // printf("previousCommandOutput: %d\n", strlen(previousCommandOutput));
     if (strlen(previousCommandOutput) > 0)
     {
       if (pipeCounter == 0)

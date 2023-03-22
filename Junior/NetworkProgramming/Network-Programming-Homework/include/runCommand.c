@@ -1,8 +1,14 @@
 #include <ctype.h>
+#include <signal.h>
 
 #define READ_END 0
 #define WRITE_END 1
 int save_in;
+
+void sigpipe_handler(int signum)
+{
+  signal(SIGPIPE, sigpipe_handler);
+}
 
 /**
  * @brief run the command
@@ -31,6 +37,8 @@ int run_command(char **command)
   int link2[2];
   pid_t pid1, pid2;
   char foo[4096 + 1];
+
+  signal(SIGPIPE, sigpipe_handler);
 
   if (pipe(link1) == -1)
     die("pipe1");
