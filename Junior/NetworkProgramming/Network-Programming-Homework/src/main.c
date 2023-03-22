@@ -64,65 +64,20 @@ int main(int argc, char **argv, char **envp)
         if (strcmp(splitedCommand[0], quit) == 0 || strcmp(splitedCommand[0], _exit) == 0)
             break;
 
-        /**
-         * Because the setenv in child process will not affect the parent process,
-         * so setenv can't be implemented by directly calling run_bash.
-         *
-         * And printenv can't be implemented by directly calling either,  because we override the PATH,
-         * causing printenv in system executables not found.
-         *
-         * printenv and setenv only work when it is at the beginning of the command, but support pipe.
-         *
-         * Save the output of printenv to previousCommandOutput, so that it can be used in the next command.
-         */
-        if (strcmp(splitedCommand[0], printenv) == 0)
+        if (strcmp(splitedCommand[0], _setenv) == 0)
         {
-            if (splitedCommandCount < 2 || strcmp(splitedCommand[1], "|") == 0)
-            {
-                currentCommandIndex += 2;
-                memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
-                for (char **env = envp; *env != 0; env++)
-                {
-                    char *thisEnv = *env;
-                    strcat(previousCommandOutput, thisEnv);
-                    strcat(previousCommandOutput, "\n");
-                }
-            }
-            else if (splitedCommandCount > 2 && strcmp(splitedCommand[2], "|") != 0)
-            {
-                printf("printenv: too many arguments\n");
-                memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
-                continue;
-            }
-            else
-            {
-                currentCommandIndex += 3;
-                memset(previousCommandOutput, 0, PREVIOUS_COMMAND_OUTPUT_SIZE);
-                strcat(previousCommandOutput, getenv(splitedCommand[1]));
-            }
-
-            if (strcmp(&previousCommandOutput[strlen(previousCommandOutput) - 1], "\n") == 0)
-                previousCommandOutput[strlen(previousCommandOutput) - 1] = '\0';
-        }
-        else if (strcmp(splitedCommand[0], _setenv) == 0)
-        {
-            if (splitedCommandCount < 3)
-                printf("setenv: not enough arguments\n");
-            else if (splitedCommandCount > 3)
-                printf("setenv: too many arguments\n");
-            else
-                setenv(splitedCommand[1], splitedCommand[2], 1);
-            currentCommandIndex += 3;
+            run_setenv(splitedCommandCount, splitedCommand);
+            continue;
         }
 
-        for (int i = currentCommandIndex; i < splitedCommandCount; i++)
+        for (int i = 0; i < splitedCommandCount; i++)
         {
             /**
              * Build the command
              *
              * Pipe all previous command output to the current command,
              * it doesn't take effect if there is no previous command output or the current command is not accept input.
-             * 
+             *
              * Pipe counter:
              * 0: no pipe
              * 1: current command is piped
@@ -131,7 +86,7 @@ int main(int argc, char **argv, char **envp)
             pipeCounter = (pipeCounter < 1) ? 0 : pipeCounter - 1;
 
             int cnt = 0;
-            char **curCommand = malloc(MAX_COMMANDS_SIZE * sizeof(char*));
+            char **curCommand = malloc(MAX_COMMANDS_SIZE * sizeof(char *));
             while (i < splitedCommandCount && strstr(splitedCommand[i], "|") == NULL)
             {
                 curCommand[cnt++] = splitedCommand[i++];

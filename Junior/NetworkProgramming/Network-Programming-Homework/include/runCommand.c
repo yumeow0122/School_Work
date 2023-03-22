@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <signal.h>
 
 #define READ_END 0
 #define WRITE_END 1
@@ -18,6 +19,8 @@ int save_in;
  */
 int run_command(char **command)
 {
+    signal(SIGPIPE, SIG_IGN); // ignore SIGPIPE signal
+
     int save_in;
     save_in = dup(STDIN_FILENO);
 
@@ -31,7 +34,6 @@ int run_command(char **command)
     int link2[2];
     pid_t pid1, pid2;
     char tempBuffer[4096 + 1];
-
 
     if (pipe(link1) == -1)
         die("pipe1");
@@ -48,6 +50,7 @@ int run_command(char **command)
         // set I/O to link1 and link2
         dup2(link1[READ_END], STDIN_FILENO);
         dup2(link2[WRITE_END], STDOUT_FILENO);
+        dup2(STDOUT_FILENO, STDERR_FILENO); // redirect standard error to standard output
 
         // close communcation between link1 and link2
         close(link1[WRITE_END]);
@@ -105,4 +108,20 @@ int run_command(char **command)
     }
     // return to the original stdin for parent process
     dup2(save_in, STDIN_FILENO);
+}
+
+/**
+ * @brief run the command "setenv"
+ * "setenv" is not an original commands, so it needs to
+ * handle with exception
+ * @param command command to run
+ */
+void run_setenv(int splitedCommandCount, char **splitedCommand)
+{
+    if (splitedCommandCount < 3)
+        printf("setenv: not enough arguments\n");
+    else if (splitedCommandCount > 3)
+        printf("setenv: too many arguments\n");
+    else
+        setenv(splitedCommand[1], splitedCommand[2], 1);
 }
