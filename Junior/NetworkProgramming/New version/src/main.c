@@ -4,10 +4,12 @@
 
 #include "run.h"
 #include "utils.h"
+#include "dll.h"
 
 int main(int argc, char **argv, char **envp)
 {
     start_shell();
+    dllNode_t *head = DLL_init();
     while (1)
     {
         printf("%% ");
@@ -26,13 +28,33 @@ int main(int argc, char **argv, char **envp)
         else if (strcmp(commands[0]->args[0], "exit") == 0)
             break;
 
+        dllNode_t *ouput = DLL_init();
+        char *cmdOut = malloc(MAX_COMMAND_SIZE * sizeof(char));
         for (int idx = 0; idx < cmdc; idx++)
         {
             Command *cmd = commands[idx];
+
+            printf("%d: ", idx);
+            print_command(cmd);
+
             if (strcmp(cmd->args[0], "setenv") == 0)
             {
                 run_setenv(cmd);
                 break;
+            }
+            else if (cmd->args[0][0] == '|')
+            {
+                int cnt = atoi(cmd->args[0] + 1);
+                dllNode_t *newPipe = node_arg_init(cnt, cmdOut);
+                DLL_add_tail((dllNode_t *)newPipe, head);
+                break;
+            }
+
+            cmdOut = run_command(cmd, cmdOut);
+            
+            if (idx == cmdc - 1)
+            {
+                printf("res: %s\n", cmdOut);
             }
         }
     }

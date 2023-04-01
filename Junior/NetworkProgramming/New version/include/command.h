@@ -11,3 +11,7 @@ typedef struct Command
 int command_parse(char *command, Command **commands);
 
 Command **build_command_array();
+
+char *run_command(Command *command, char *prevOut);
+
+void print_command(Command *command);

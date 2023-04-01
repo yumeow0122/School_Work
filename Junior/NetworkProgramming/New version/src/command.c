@@ -1,8 +1,27 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include <sys/types.h>
+#include <unistd.h>
+#include <signal.h>
+#include <fcntl.h>
 
 #include "command.h"
+
+#define READ_END 0
+#define WRITE_END 1
+
+void sigpipe_handler(int signum)
+{
+    /**
+     * When commaand not found or some error happen,
+     * second child try to write data to parent but it already close.
+     *
+     * OS will genearate "SIGPIPE" and output something by default,
+     * use "signal(SIGPIPE, sigpipe_handler);"
+     * to make operation be "sigpipe_handler".
+     */
+}
 
 int command_parse(char *command, Command **commands)
 {
@@ -51,4 +70,11 @@ Command **build_command_array()
     commands[MAX_COMMAND_SIZE - 1] = NULL;
 
     return commands;
+}
+
+void print_command(Command *command)
+{
+    for (int c = 0; c < command->argc; c++)
+        printf("%s ", command->args[c]);
+    printf("\n");
 }
