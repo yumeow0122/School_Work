@@ -34,9 +34,6 @@ int main(int argc, char **argv, char **envp)
         {
             Command *cmd = commands[idx];
 
-            printf("%d: ", idx);
-            print_command(cmd);
-
             if (strcmp(cmd->args[0], "setenv") == 0)
             {
                 run_setenv(cmd);
@@ -50,12 +47,16 @@ int main(int argc, char **argv, char **envp)
                 break;
             }
 
+
             cmdOut = run_command(cmd, cmdOut);
-            
-            if (idx == cmdc - 1)
-            {
-                printf("res: %s\n", cmdOut);
-            }
+
+            printf("%d: ", idx);
+            print_command(cmd);    
+            printf("res: %s\n", cmdOut);        
+            // if (idx == cmdc - 1)
+            // {
+            //     printf("res: %s\n", cmdOut);
+            // }
         }
     }
     end_shell();

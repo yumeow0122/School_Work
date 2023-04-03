@@ -123,6 +123,7 @@ int main(int argc, char **argv, char **envp)
         strcat(currentCommand, " ");
         i++;
       }
+      printf("test %d: %s\n", i, currentCommand);
       char **tmpCommand = malloc(MAX_COMMANDS_SIZE * sizeof(char *));
       int targc = command_parse(currentCommand, tmpCommand);
 
