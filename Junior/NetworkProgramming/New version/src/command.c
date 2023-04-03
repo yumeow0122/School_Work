@@ -79,53 +79,84 @@ Command **build_command_array()
     return commands;
 }
 
-char *run_command(Command *command, char *prevOut) {
+char *run_command(Command *command, char *prevOut)
+{
     signal(SIGPIPE, sigpipe_handler);
     int save_in;
     save_in = dup(STDIN_FILENO);
 
-    int link[2];
-    pid_t pid;
-    char *res = malloc(MAX_COMMAND_SIZE * sizeof(char));
+    // copy prevOut to currentCommandOutput and clear prevOut
+    char currentCommandOutput[MAX_COMMAND_SIZE];
+    memset(currentCommandOutput, 0, MAX_COMMAND_SIZE);
+    strcat(currentCommandOutput, prevOut);
+    memset(prevOut, 0, MAX_COMMAND_SIZE);
 
-    if (pipe(link) == -1)
+    int link1[2];
+    int link2[2];
+    pid_t pid1, pid2;
+    char buffer[4096 + 1];
+
+    if (pipe(link1) == -1)
         die("pipe1");
+    if (pipe(link2) == -1)
+        die("pipe2");
 
-    if ((pid = fork()) == -1)
-        die("fork");
+    if ((pid1 = fork()) == -1)
+        die("fork1");
 
-    if (pid == 0) {
-        // child
-        if (dup2(link[1], STDOUT_FILENO) == -1)
-            die("dup2");
-
-        if (prevOut != NULL) {
-            if (dup2(STDOUT_FILENO, STDIN_FILENO) == -1)
-                die("dup2");
-            write(STDIN_FILENO, prevOut, strlen(prevOut));
-        }
-
-        close(link[0]);
-        close(link[1]);
-
-        // Set SIGPIPE handler
-        signal(SIGPIPE, sigpipe_handler);
-
+    if (pid1 == 0)
+    {
+        // child 1
+        dup2(link1[READ_END], STDIN_FILENO);
+        dup2(link2[WRITE_END], STDOUT_FILENO);
+        close(link1[WRITE_END]);
+        close(link2[READ_END]);
         execvp(command->args[0], command->args);
-        die("execvp");
-    } else {
-        // parent
-        close(link[1]);
-        waitpid(pid, NULL, 0);
-        int len = read(link[0], res, MAX_COMMAND_SIZE);
-        if (len == -1)
-            die("read");
-        res[len] = '\0';
-    }
-    dup2(save_in, STDIN_FILENO);
-    return res;
-}
 
+        char *error = malloc(128 * sizeof(char));
+        strcpy(error, "Unknown command: [");
+        strcat(error, command->args[0]);
+        strcat(error, "]");
+        die(error);
+    }
+    else
+    {
+        if ((pid2 = fork()) == -1)
+            die("fork2");
+        if (pid2 == 0)
+        {
+            // child 2
+            dup2(link1[WRITE_END], STDOUT_FILENO);
+            close(link1[READ_END]);
+            close(link2[READ_END]);
+            close(link2[WRITE_END]);
+            execl("./bin/echo", "-e", currentCommandOutput, (char *)0);
+            die("echo: command not found");
+        }
+        else
+        {
+            // parent
+            dup2(link2[READ_END], STDIN_FILENO);
+            close(link1[READ_END]);
+            close(link1[WRITE_END]);
+            close(link2[WRITE_END]);
+            int nbytes = 0;
+            while (0 != (nbytes = read(link2[READ_END], buffer, sizeof(buffer))))
+            {
+                memset(prevOut, 0, MAX_COMMAND_SIZE);
+                strcat(prevOut, buffer);
+                memset(buffer, 0, 4096);
+            }
+            prevOut[strlen(prevOut) - 1] = '\0';
+            wait(NULL);
+        }
+        wait(NULL);
+    }
+
+    // return to the original stdin for parent process
+    dup2(save_in, STDIN_FILENO);
+    return prevOut;
+}
 
 void print_command(Command *command)
 {

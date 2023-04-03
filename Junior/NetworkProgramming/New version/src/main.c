@@ -49,14 +49,11 @@ int main(int argc, char **argv, char **envp)
 
 
             cmdOut = run_command(cmd, cmdOut);
-
-            printf("%d: ", idx);
-            print_command(cmd);    
-            printf("res: %s\n", cmdOut);        
-            // if (idx == cmdc - 1)
-            // {
-            //     printf("res: %s\n", cmdOut);
-            // }
+      
+            if (idx == cmdc - 1)
+            {
+                printf("%s\n", cmdOut);
+            }
         }
     }
     end_shell();
