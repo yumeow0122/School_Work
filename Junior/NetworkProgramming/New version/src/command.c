@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
-
+#include <sys/wait.h>
 #include "command.h"
 
 #define READ_END 0

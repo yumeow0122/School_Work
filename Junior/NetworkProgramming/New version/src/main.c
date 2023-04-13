@@ -28,8 +28,8 @@ int main(int argc, char **argv, char **envp)
         else if (strcmp(commands[0]->args[0], "exit") == 0)
             break;
 
-        dllNode_t *ouput = DLL_init();
         char *cmdOut = malloc(MAX_COMMAND_SIZE * sizeof(char));
+        have_pipe_element(head, cmdOut);
         for (int idx = 0; idx < cmdc; idx++)
         {
             Command *cmd = commands[idx];
@@ -47,13 +47,16 @@ int main(int argc, char **argv, char **envp)
                 break;
             }
 
-
             cmdOut = run_command(cmd, cmdOut);
-      
+
             if (idx == cmdc - 1)
             {
                 printf("%s\n", cmdOut);
             }
+        }
+        if (strlen(cmdOut) > 0)
+        {
+            decrement_all_pipe(head);
         }
     }
     end_shell();

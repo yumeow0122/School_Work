@@ -1,40 +1,40 @@
-#include "dll.h"
-#include <stdio.h>
-#include <stdlib.h>
+// #include "dll.h"
+// #include <stdio.h>
+// #include <stdlib.h>
 
-typedef struct data
-{
-    dllNode_t n;
-    int d;
-} data;
+// typedef struct data
+// {
+//     dllNode_t n;
+//     int d;
+// } data;
 
-void print(dllNode_t *head)
-{
-    dllNode_t *j = head -> next;
-    printf("Current link list:{");
-    while(j != head)
-    {
-        printf("%d",((data*)j) -> d);
-        j = j -> next;
-        if(j != head)
-            printf(", ");
-    }
-    printf("}\n");
-}
+// void print(dllNode_t *head)
+// {
+//     dllNode_t *j = head -> next;
+//     printf("Current link list:{");
+//     while(j != head)
+//     {
+//         printf("%d",((data*)j) -> d);
+//         j = j -> next;
+//         if(j != head)
+//             printf(", ");
+//     }
+//     printf("}\n");
+// }
 
-void print2(dllNode_t *head)
-{
-    dllNode_t *j = head -> next;
-    printf("{");
-    while(j != head)
-    {
-        printf("%d",((data*)j) -> d);
-        j = j -> next;
-        if(j != head)
-            printf(", ");
-    }
-    printf("}");
-}
+// void print2(dllNode_t *head)
+// {
+//     dllNode_t *j = head -> next;
+//     printf("{");
+//     while(j != head)
+//     {
+//         printf("%d",((data*)j) -> d);
+//         j = j -> next;
+//         if(j != head)
+//             printf(", ");
+//     }
+//     printf("}");
+// }
 
 // int main()
 // {

@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifndef MAX_OUTPUT_SIZE
-#define MAX_OUTPUT_SIZE 500
+#define MAX_OUTPUT_SIZE 50000
 #endif
 
 typedef struct node
@@ -13,11 +14,63 @@ typedef struct node
     int pipeCnt;
 } dllNode_t;
 
+void print(dllNode_t *head)
+{
+    dllNode_t *cur = head->next;
+    printf("Current link list:{");
+    while (cur != head)
+    {
+        printf("%d", cur->pipeCnt);
+        cur = cur->next;
+        if (cur != head)
+            printf(", ");
+    }
+    printf("}\n");
+}
+
+void decrement_all_pipe(dllNode_t *head)
+{
+    dllNode_t *cur = head->next;
+    while (cur != head)
+    {
+        cur->pipeCnt--;
+        cur = cur->next;
+    }
+}
+
+void have_pipe_element(dllNode_t *head, char *cmdOut)
+{
+    dllNode_t *cur = head->next;
+    while (cur != head)
+    {
+        if (cur->pipeCnt == 0)
+        {
+            strcpy(cmdOut, cur->prevCommandOutput);
+            return;
+        }
+        cur = cur->next;
+    }
+    cmdOut = NULL;
+}
+// char *have_pipe_element(dllNode_t *head)
+// {
+//     dllNode_t *cur = head;
+//     while (cur->next != head)
+//     {
+//         if (cur->pipeCnt == 0){
+//             printf("gogo: %s\n", cur->prevCommandOutput);
+//             return cur->prevCommandOutput;
+//         }
+//         cur = cur->next;
+//     }
+//     return NULL;
+// }
+
 dllNode_t *DLL_init()
 {
     dllNode_t *newlist = (dllNode_t *)malloc(sizeof(dllNode_t));
     newlist->prevCommandOutput = malloc(MAX_OUTPUT_SIZE * sizeof(char));
-    newlist->pipeCnt = 0;
+    newlist->pipeCnt = -1;
     newlist->prev = newlist;
     newlist->next = newlist;
     return newlist;
