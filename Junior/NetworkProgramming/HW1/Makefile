@@ -16,6 +16,7 @@ DEPS := ${OBJS:.o=.d}
 shell: $(OBJS)
 	$(CC) $^ -o bin/$@
 	cp ./bin/shell ./
+	rm ./bin/shell
 
 obj/%.o: src/%.c
 	$(CC) $(CFLAG) $(INC) -c -o $@ $<
@@ -28,7 +29,7 @@ clean:
 	rm -f obj/*.o obj/*.d
 
 exec:
-	./bin/shell
+	./shell
 
 test:
 	./bin/number
@@ -37,3 +38,5 @@ doitall:
 	make clean
 	make
 	make exec
+	make clean
+	rm ./shell
