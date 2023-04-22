@@ -27,8 +27,4 @@ void add_user(User *head, User *nuser);
 void delete_user(User *user);
 
 int get_min_id(User *head);
-
-User *node_arg_init(int pipeCnt, char *prevCommandOutput);
-void have_pipe_element(User *head, char *cmdOut);
-void decrement_all_pipe(User *head);
 #endif // DOUBLELINK_H_INCLUDED
