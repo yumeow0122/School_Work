@@ -7,7 +7,7 @@
 UserData *user_data_init()
 {
     UserData *data = (UserData *)malloc(sizeof(UserData));
-    data->id = -1;
+    data->id = 0;
     data->name = "no name";
     data->ip = malloc(MAX_USER_IP * sizeof(char *));
     return data;
@@ -23,7 +23,7 @@ User *user_init()
 }
 
 void log_all_user(User *head, int idx)
-{    
+{
     const char *TID = "<ID>";
     const char *TNAME = "<NAME>";
     const char *TIP = "<IP>";
@@ -52,6 +52,7 @@ void delete_user(User *user)
 {
     user->prev->next = user->next;
     user->next->prev = user->prev;
+    free(user);
 }
 
 int get_min_id(User *head)
