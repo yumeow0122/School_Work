@@ -5,6 +5,7 @@
 #define MAX_USER_NAME 10
 #define MAX_USER_IP 20
 
+#include "pipe_controller.h"
 typedef struct UserData
 {
     int id;
