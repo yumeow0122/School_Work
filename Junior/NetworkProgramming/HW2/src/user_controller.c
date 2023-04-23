@@ -3,6 +3,7 @@
 #include "string.h"
 
 #include "user_controller.h"
+#include "pipe_controller.h"
 
 UserData *user_data_init()
 {
@@ -10,6 +11,7 @@ UserData *user_data_init()
     data->id = 0;
     data->name = "no name";
     data->ip = malloc(MAX_USER_IP * sizeof(char *));
+    data->pipeHead = pipe_init();
     return data;
 }
 

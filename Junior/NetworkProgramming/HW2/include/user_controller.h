@@ -10,6 +10,8 @@ typedef struct UserData
     int id;
     char *name;
     char *ip;
+    
+    Pipe *pipeHead;
 } UserData;
 
 typedef struct User
