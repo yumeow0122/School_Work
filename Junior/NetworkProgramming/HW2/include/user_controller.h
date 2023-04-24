@@ -11,7 +11,7 @@ typedef struct UserData
     int id;
     char *name;
     char *ip;
-    
+
     Pipe *pipeHead;
 } UserData;
 
@@ -30,4 +30,6 @@ void add_user(User *head, User *nuser);
 void delete_user(User *user);
 
 int get_min_id(User *head);
+
+char *get_ip_port(char *ip, char *port);
 #endif // DOUBLELINK_H_INCLUDED

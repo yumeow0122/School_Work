@@ -2,6 +2,7 @@
 #include "stdlib.h"
 #include "string.h"
 
+#include "util.h"
 #include "user_controller.h"
 #include "pipe_controller.h"
 
@@ -76,4 +77,11 @@ int get_min_id(User *head)
             return idx;
     }
     return cnt; // out of bound
+}
+
+char *get_ip_port(char *ip, char *port)
+{
+    strcat(ip, ":");
+    strcat(ip, port);
+    return ip;
 }
