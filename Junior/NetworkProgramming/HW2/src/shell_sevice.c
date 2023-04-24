@@ -8,11 +8,12 @@
 #include <sys/wait.h>
 
 #include "shell_service.h"
+#include "chat_service.h"
 #include "command_controller.h"
 #include "user_controller.h"
 #include "pipe_controller.h"
 
-int shell(User *user, char *input, char *output)
+int shell(User *user, char *input, char *output, int fd)
 {
     int isPipe = 0;
     UserData *udata = user->data;
@@ -24,7 +25,6 @@ int shell(User *user, char *input, char *output)
     else if (strcmp(commands[0]->args[0], "exit") == 0)
         return -1;
 
-    // char *cmdOut = malloc(MAX_OUTPUT_SIZE * sizeof(char));
     have_pipe_cmd(udata->pipeHead, output);
     for (int idx = 0; idx < cmdc; idx++)
     {
@@ -43,16 +43,10 @@ int shell(User *user, char *input, char *output)
             npipe->data->prevOutput = output;
             add_pipe(udata->pipeHead, npipe);
             isPipe = 1;
-            //strcpy(output, "");
             break;
         }
 
-        output = run_command(cmd, output);
-
-        // if (idx == cmdc - 1)
-        // {
-        //     printf("%s\n", output);
-        // }
+        output = run_command(cmd, output, fd);
     }
     if (strlen(output) > 0)
     {
@@ -71,13 +65,15 @@ void run_setenv(Command *command)
     setenv(command->args[1], command->args[2], 1);
 }
 
-void start_shell()
+void start_shell(int fd)
 {
-    printf("----- Shell start, enter \"exit\" to leave -----\n");
+    char *LOGINM = "----- Shell start, enter \"exit\" to leave -----\n";
+    send_msg(fd, LOGINM);
     setenv("PATH", "/bin:./bin", 1);
 }
 
-void end_shell()
+void end_shell(int fd)
 {
-    printf("----- Shell end. -----\n");
+    char *LOGOUTM = "----- Shell start, enter \"exit\" to leave -----\n";
+    send_msg(fd, LOGOUTM);
 }

@@ -25,7 +25,7 @@ Command **get_command_array();
 
 int command_parse(char *command, Command **commands);
 
-char *run_command(Command *command, char *prevOut);
+char *run_command(Command *command, char *prevOut, int fd);
 
 void print_command(Command *command);
 void sigpipe_handler(int signum);

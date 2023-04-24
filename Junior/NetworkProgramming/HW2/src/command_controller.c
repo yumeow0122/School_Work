@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
+#include "chat_service.h"
 #include "command_controller.h"
 
 Command **get_command_array()
@@ -58,7 +59,7 @@ int command_parse(char *command, Command **commands)
     return cmdc + 1;
 }
 
-char *run_command(Command *command, char *prevOut)
+char *run_command(Command *command, char *prevOut, int fd)
 {
     signal(SIGPIPE, sigpipe_handler);
     int save_in;
@@ -96,6 +97,7 @@ char *run_command(Command *command, char *prevOut)
         strcpy(error, "Unknown command: [");
         strcat(error, command->args[0]);
         strcat(error, "]");
+        send_msg(fd, error);
         die(error);
     }
     else
@@ -137,7 +139,6 @@ char *run_command(Command *command, char *prevOut)
     return prevOut;
 }
 
-
 void print_command(Command *command)
 {
     for (int c = 0; c < command->argc; c++)
@@ -145,6 +146,6 @@ void print_command(Command *command)
     printf("\n");
 }
 
-void sigpipe_handler(int signum){
-    
+void sigpipe_handler(int signum)
+{
 }

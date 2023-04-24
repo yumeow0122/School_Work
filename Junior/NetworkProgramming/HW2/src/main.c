@@ -71,19 +71,19 @@ int main()
         add_user(uhead, user);
         if (fork() == 0)
         {
+            start_shell(new_fd);            
             close(sockfd);
-            char buf[1024];
             // Handle client connection here
             while (1)
             {
                 char *sign = "%";
                 char *input = malloc(MAX_INPUT_SIZE * sizeof(char *));
-                char *ouput = malloc(MAX_OUTPUT_SIZE * sizeof(char *));
+                char *output = malloc(MAX_OUTPUT_SIZE * sizeof(char *));
 
                 log_all_user(uhead, user->data->id);
                 send_msg(new_fd, sign);
 
-                int num_bytes = recv(new_fd, input, sizeof(input) - 1, 0);
+                int num_bytes = recv(new_fd, input, MAX_INPUT_SIZE, 0);
                 if (num_bytes == -1)
                 {
                     perror("recv");
@@ -95,21 +95,22 @@ int main()
                     break;
                 }
 
-                input[num_bytes] = '\0';
+                crlf_to_lf(input);
                 printf("Received message from client: %s\n", input);
 
-                int state = shell(user, input, ouput);
-
+                int state = shell(user, input, output, new_fd);
+                strcat(output, "\n");
                 if (state == -1)
                     break;
                 else if (state == 0)
-                    send_msg(new_fd, ouput);
+                    send_msg(new_fd, output);
             }
-
+            end_shell(new_fd);
+            delete_user(user);
             close(new_fd);
             exit(0);
         }
-
+        
         close(new_fd);
     }
 
