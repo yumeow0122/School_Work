@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 
 #include "shell_service.h"
-#include "chat_service.h"
+#include "chat_controller.h"
 #include "command_controller.h"
 #include "user_controller.h"
 #include "pipe_controller.h"

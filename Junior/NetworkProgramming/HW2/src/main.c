@@ -8,14 +8,15 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <pthread.h>
 
 #include "util.h"
 #include "user_controller.h"
 #include "command_controller.h"
 #include "shell_service.h"
-#include "chat_service.h"
+#include "chat_controller.h"
 
-#define PORT 8887
+#define PORT 8883
 
 int main()
 {
@@ -67,51 +68,24 @@ int main()
         User *user = user_init();
         user->data->id = get_min_id(uhead);
         user->data->ip = userIP;
-
         add_user(uhead, user);
-        if (fork() == 0)
-        {
-            start_shell(new_fd);            
-            close(sockfd);
-            // Handle client connection here
-            while (1)
-            {
-                char *sign = "%";
-                char *input = malloc(MAX_INPUT_SIZE * sizeof(char *));
-                char *output = malloc(MAX_OUTPUT_SIZE * sizeof(char *));
 
-                log_all_user(uhead, user->data->id);
-                send_msg(new_fd, sign);
 
-                int num_bytes = recv(new_fd, input, MAX_INPUT_SIZE, 0);
-                if (num_bytes == -1)
-                {
-                    perror("recv");
-                    break;
-                }
-                else if (num_bytes == 0)
-                {
-                    printf("Client disconnected\n");
-                    break;
-                }
-
-                crlf_to_lf(input);
-                printf("Received message from client: %s\n", input);
-
-                int state = shell(user, input, output, new_fd);
-                strcat(output, "\n");
-                if (state == -1)
-                    break;
-                else if (state == 0)
-                    send_msg(new_fd, output);
-            }
-            end_shell(new_fd);
-            delete_user(user);
-            close(new_fd);
-            exit(0);
-        }
+        ChatArgs *cargs = (ChatArgs *)malloc(sizeof(ChatArgs));
+        cargs->socketFD = new_fd;
+        cargs->user = user;
+        cargs->uhead = uhead;
         
-        close(new_fd);
+        pthread_t thread;
+        if (pthread_create(&thread, NULL, chat_client, (void *)cargs) != 0)
+        {
+            perror("pthread_create");
+            // close(new_fd);
+            free(cargs);
+            continue;
+        }
+        pthread_detach(thread);
+        // close(new_fd);
     }
 
     return 0;

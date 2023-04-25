@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
-#include "chat_service.h"
+#include "chat_controller.h"
 #include "command_controller.h"
 
 Command **get_command_array()

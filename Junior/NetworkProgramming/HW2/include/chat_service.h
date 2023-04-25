@@ -1,6 +1,8 @@
-#ifndef CHAT_H_INCLUDED
-#define CHAT_H_INCLUDED
+#ifndef CHAT_SERVICE_H_INCLUDED
+#define CHAT_SERVICE_H_INCLUDED
 
-void send_msg(int fd, char *msg);
-int recv_msg(char *msg);
-#endif // CHAT_H_INCLUDED
+#include "user_controller.h"
+#include "command_controller.h"
+
+
+#endif // CHAT_SERVICE_H_INCLUDED
