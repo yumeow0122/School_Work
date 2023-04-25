@@ -55,11 +55,7 @@ void *chat_client(void *args)
             send_msg(socketFD, output);
     }
     end_shell(socketFD);
-    printf("before:\n");
-    log_all_user(uhead, 0);
     delete_user(user);
-    printf("after:\n");
-    log_all_user(uhead, 0);
     close(socketFD);
 }
 

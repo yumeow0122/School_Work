@@ -10,8 +10,8 @@ UserData *user_data_init()
 {
     UserData *data = (UserData *)malloc(sizeof(UserData));
     data->id = 0;
-
-    data->name = malloc(MAX_USER_NAME *sizeof(char*));
+    data->fd = -1;
+    data->name = malloc(MAX_USER_NAME * sizeof(char *));
     strcpy(data->name, "no name");
     data->ip = malloc(MAX_USER_IP * sizeof(char *));
     data->pipeHead = pipe_init();
@@ -27,6 +27,19 @@ User *user_init()
     return user;
 }
 
+User *get_user_by_id(User *head, int id)
+{
+    User *cur = head->next;
+    while (cur != head)
+    {
+        UserData *udata = cur->data;
+        if(udata->id == id)
+            return cur;
+        cur = cur->next;
+    }
+    printf("target not exist\n");
+    return head;
+}
 void log_all_user(User *head, int idx)
 {
     const char *TID = "<ID>";

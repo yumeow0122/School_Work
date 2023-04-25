@@ -9,6 +9,7 @@
 typedef struct UserData
 {
     int id;
+    int fd;
     char *name;
     char *ip;
 
@@ -24,7 +25,7 @@ typedef struct User
 
 UserData *user_data_init();
 User *user_init();
-
+User *get_user_by_id(User *head, int id);
 void log_all_user(User *head, int idx);
 void add_user(User *head, User *nuser);
 void delete_user(User *user);

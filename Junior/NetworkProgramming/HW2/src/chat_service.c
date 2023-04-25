@@ -50,3 +50,43 @@ void name(User *uhead, User *user, int socketFD, char *newName)
     }
     send_msg(socketFD, msg);
 }
+
+void tell(User *uhead, User *sender, int socketFD, Command *cmd)
+{
+    char *msg = malloc(MAX_OUTPUT_SIZE * sizeof(char *));
+    int tid = atoi(cmd->args[1]);
+    User *receiver = get_user_by_id(uhead, tid);
+    snprintf(msg, MAX_OUTPUT_SIZE, "<user(%d) tell you>:", sender->data->id);
+
+    for (int idx = 2; idx < cmd->argc; idx++)
+    {
+        strcat(msg, cmd->args[idx]);
+        strcat(msg, " ");
+    }
+    strcat(msg, "\n");
+    send_msg(receiver->data->fd, msg);
+
+    snprintf(msg, MAX_OUTPUT_SIZE, "send accept.\n");
+    send_msg(sender->data->fd, msg);
+}
+
+void yell(User *uhead, User *user, int socketFD, Command *cmd)
+{
+    char *_msg = malloc(MAX_OUTPUT_SIZE * sizeof(char *));
+    for (int idx = 1; idx < cmd->argc; idx++)
+    {
+        strcat(_msg, cmd->args[idx]);
+        strcat(_msg, " ");
+    }
+    strcat(_msg, "\n");
+
+    User *cur = uhead->next;
+    while (cur != uhead)
+    {
+        char *msg = malloc(MAX_OUTPUT_SIZE * sizeof(char *));
+        snprintf(msg, MAX_OUTPUT_SIZE, "<user(%d) yell:", user->data->id);
+        strcat(msg, _msg);
+        send_msg(cur->data->fd, msg);
+        cur = cur->next;
+    }
+}

@@ -67,6 +67,7 @@ int main()
 
         User *user = user_init();
         user->data->id = get_min_id(uhead);
+        user->data->fd = new_fd;
         user->data->ip = userIP;
         add_user(uhead, user);
 

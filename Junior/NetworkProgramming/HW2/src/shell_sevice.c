@@ -46,6 +46,16 @@ int shell(User *uhead, User *user, char *input, char *output, int fd)
             name(uhead, user, fd, cmd->args[1]);
             break;
         }
+        else if (strcmp(cmd->args[0], "tell") == 0)
+        {
+            tell(uhead, user, fd, cmd);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "yell") == 0)
+        {
+            yell(uhead, user, fd, cmd);
+            break;
+        }
         else if (cmd->args[0][0] == '|')
         {
             int cnt = atoi(cmd->args[0] + 1);
