@@ -60,7 +60,7 @@ void delete_user(User *user)
     free(user);
 }
 
-void change_user_name(User *head, User *user, char *name)
+int can_change_user_name(User *head, User *user, char *name)
 {
     User *cur = head->next;
     while (cur != head)
@@ -68,12 +68,13 @@ void change_user_name(User *head, User *user, char *name)
         if (strcmp(cur->data->name, name) == 0)
         {
             printf("User already exist.\n");
-            return;
+            return 0;
         }
         cur = cur->next;
     }
     printf("Name change success.\n");
     strcpy(user->data->name, name);
+    return 1;
 }
 
 int get_min_id(User *head)

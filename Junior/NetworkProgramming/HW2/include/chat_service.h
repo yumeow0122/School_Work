@@ -6,4 +6,5 @@
 
 void who(User *uhead, User *user, int socketFD);
 
+void name(User *uhead, User *user, int socketFD, char *newName);
 #endif // CHAT_SERVICE_H_INCLUDED

@@ -41,6 +41,11 @@ int shell(User *uhead, User *user, char *input, char *output, int fd)
             who(uhead, user, fd);
             break;
         }
+        else if (strcmp(cmd->args[0], "name") == 0)
+        {
+            name(uhead, user, fd, cmd->args[1]);
+            break;
+        }
         else if (cmd->args[0][0] == '|')
         {
             int cnt = atoi(cmd->args[0] + 1);

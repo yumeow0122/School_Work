@@ -28,7 +28,8 @@ User *user_init();
 void log_all_user(User *head, int idx);
 void add_user(User *head, User *nuser);
 void delete_user(User *user);
-void change_user_name(User *head, User *user, char *name);
+
+int can_change_user_name(User *head, User *user, char *name);
 int get_min_id(User *head);
 
 char *get_ip_port(char *ip, char *port);

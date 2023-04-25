@@ -35,3 +35,18 @@ void who(User *uhead, User *user, int socketFD)
     }
     send_msg(socketFD, msg);
 }
+
+void name(User *uhead, User *user, int socketFD, char *newName)
+{
+    char *msg = malloc(MAX_OUTPUT_SIZE * sizeof(char *));
+    if (can_change_user_name(uhead, user, newName))
+    {
+        strcpy(user->data->name, newName);
+        snprintf(msg, MAX_OUTPUT_SIZE, "Change user name sucess.\n");
+    }
+    else
+    {
+        snprintf(msg, MAX_OUTPUT_SIZE, "User name alreaady exist.\n");
+    }
+    send_msg(socketFD, msg);
+}
