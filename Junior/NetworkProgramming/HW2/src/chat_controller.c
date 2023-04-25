@@ -47,7 +47,7 @@ void *chat_client(void *args)
         crlf_to_lf(input);
         printf("Received message from client: %s\n", input);
 
-        int state = shell(user, input, output, socketFD);
+        int state = shell(uhead, user, input, output, socketFD);
         strcat(output, "\n");
         if (state == -1)
             break;
@@ -55,7 +55,11 @@ void *chat_client(void *args)
             send_msg(socketFD, output);
     }
     end_shell(socketFD);
+    printf("before:\n");
+    log_all_user(uhead, 0);
     delete_user(user);
+    printf("after:\n");
+    log_all_user(uhead, 0);
     close(socketFD);
 }
 

@@ -10,7 +10,9 @@ UserData *user_data_init()
 {
     UserData *data = (UserData *)malloc(sizeof(UserData));
     data->id = 0;
-    data->name = "no name";
+
+    data->name = malloc(MAX_USER_NAME *sizeof(char*));
+    strcpy(data->name, "no name");
     data->ip = malloc(MAX_USER_IP * sizeof(char *));
     data->pipeHead = pipe_init();
     return data;
@@ -58,6 +60,22 @@ void delete_user(User *user)
     free(user);
 }
 
+void change_user_name(User *head, User *user, char *name)
+{
+    User *cur = head->next;
+    while (cur != head)
+    {
+        if (strcmp(cur->data->name, name) == 0)
+        {
+            printf("User already exist.\n");
+            return;
+        }
+        cur = cur->next;
+    }
+    printf("Name change success.\n");
+    strcpy(user->data->name, name);
+}
+
 int get_min_id(User *head)
 {
     int record[MAX_USER_ID];
@@ -66,16 +84,19 @@ int get_min_id(User *head)
     User *cur = head->next;
     while (cur != head)
     {
+        printf("log uid:%d\n", cur->data->id);
         record[cur->data->id] = 1;
         cnt++;
         cur = cur->next;
     }
-    record[cur->data->id] = 1;
-    for (int idx = 0; idx < cnt; idx++)
+    // record[cur->data->id] = 1;
+    printf("log cnt:%d\n", cnt);
+    for (int idx = 0; idx < MAX_USER_ID; idx++)
     {
         if (!record[idx])
             return idx;
     }
+    printf("bound\n");
     return cnt; // out of bound
 }
 

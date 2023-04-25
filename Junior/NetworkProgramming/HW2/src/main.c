@@ -16,7 +16,7 @@
 #include "shell_service.h"
 #include "chat_controller.h"
 
-#define PORT 8883
+#define PORT 8888
 
 int main()
 {

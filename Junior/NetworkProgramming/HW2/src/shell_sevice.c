@@ -9,11 +9,12 @@
 
 #include "shell_service.h"
 #include "chat_controller.h"
+#include "chat_service.h"
 #include "command_controller.h"
 #include "user_controller.h"
 #include "pipe_controller.h"
 
-int shell(User *user, char *input, char *output, int fd)
+int shell(User *uhead, User *user, char *input, char *output, int fd)
 {
     int isPipe = 0;
     UserData *udata = user->data;
@@ -33,6 +34,11 @@ int shell(User *user, char *input, char *output, int fd)
         if (strcmp(cmd->args[0], "setenv") == 0)
         {
             run_setenv(cmd);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "who") == 0)
+        {
+            who(uhead, user, fd);
             break;
         }
         else if (cmd->args[0][0] == '|')

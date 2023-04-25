@@ -12,7 +12,7 @@
  * @param output output
  * @return status of the command, -1 means exit, 0 means normal, 1 means pipe 
  */
-int shell(User *user, char *input, char *output, int fd);
+int shell(User *uhead, User *user, char *input, char *output, int fd);
 
 void run_setenv(Command *command);
 
