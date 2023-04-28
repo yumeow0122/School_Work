@@ -14,7 +14,7 @@ DEPS := ${OBJS:.o=.d}
 .PHONY: clean all exec test doitall
 
 shell: $(OBJS)
-	$(CC) $^ -o bin/$@
+	$(CC) $^ -o bin/$@ -lpthread
 	cp ./bin/shell ./
 	rm ./bin/shell
 
