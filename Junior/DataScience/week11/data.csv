@@ -1,0 +1,31 @@
+High school system,Gender,Num of graduates,Num of enroll in National university,Num of enroll in private university,Num of enroll in police university,Num of enroll in police college,Num of enroll in military school,Num of enroll in other school
+National,male,12381,5727,4817,38,309,270,1
+National,female,13014,5350,6623,1,32,176,24
+county & city,male,23143,10021,10576,23,266,242,5
+county & city,female,24351,9111,13641,11,36,133,2
+National,male,13980,3610,8241,23,178,273,1
+National,female,13771,3135,9240,11,18,119,3
+National,male,13352,3885,5040,2,33,190,1
+National,female,9680,2945,4874,1,2,57,1
+county & city,male,9315,4040,3611,3,12,70,1
+county & city,female,5688,2321,2790,0,1,13,3
+private,male,33114,2298,16251,9,22,393,25
+private,female,30259,2232,18098,5,14,114,29
+National,male,2545,669,1348,3,44,54,0
+National,female,3367,762,2205,1,5,28,0
+county & city,male,1906,595,1088,1,21,36,4
+county & city,female,2066,455,1464,0,1,12,0
+private,male,2686,319,1632,0,6,57,2
+private,female,3276,306,2411,0,2,18,4
+National,male,1449,91,470,0,1,10,2
+National,female,1048,54,448,0,1,8,19
+county & city,male,394,11,77,0,0,0,0
+county & city,female,221,13,68,0,0,1,0
+private,male,3894,43,943,1,0,11,30
+private,female,3000,35,966,2,0,9,9
+National,male,1705,43,234,0,2,8,17
+National,female,1104,27,136,0,0,4,8
+county & city,male,1202,31,258,0,1,5,2
+county & city,female,784,27,112,0,0,0,11
+private,male,4777,28,248,0,1,6,8
+private,female,3816,29,272,0,0,4,2
