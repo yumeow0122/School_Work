@@ -1,0 +1,9 @@
+#ifndef SERVER_CONNCET_H_INCLUDED
+#define SERVER_CONNCET_H_INCLUDED
+
+#define SERVER_IP "134.208.2.60"
+#define SERVER_PORT 9999
+
+int server_connect();
+
+#endif // SERVER_CONNCET_H_INCLUDED
