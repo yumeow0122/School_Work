@@ -1,0 +1,5 @@
+#ifndef REDIS_CONTROLLER_H_INCLUDED
+#define REDIS_CONTROLLER_H_INCLUDED
+
+redisContext *connect_redis();
+#endif // REDIS_CONTROLLER_H_INCLUDED
