@@ -8,6 +8,7 @@ typedef struct ServerArgs
     int socketFD;
     User *user;
     User *uhead;
+    redisContext *redis;
 } ServerArgs;
 
 void *server_client(void *arg);

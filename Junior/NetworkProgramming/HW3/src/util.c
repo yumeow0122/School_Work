@@ -54,4 +54,10 @@ void crlf_to_lf(char *str)
         *q++ = *p++;
     }
     *q = '\0';
+
+    for (int i = 0; i < strlen(str); i++)
+    {
+        if (str[i] == '\r' || str[i] == '\n')
+            str[i] = '\0';
+    }
 }

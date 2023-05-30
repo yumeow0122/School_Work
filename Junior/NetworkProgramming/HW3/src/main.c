@@ -21,6 +21,7 @@
 
 #define PORT 8888
 
+
 int main()
 {
     int sockfd, new_fd;
@@ -78,6 +79,7 @@ int main()
         sargs->socketFD = new_fd;
         sargs->user = user;
         sargs->uhead = uhead;
+        sargs->redis = redis;
         pthread_t thread;
         if (pthread_create(&thread, NULL, server_client, (void *)sargs) != 0)
         {
@@ -87,29 +89,7 @@ int main()
             continue;
         }
         pthread_detach(thread);
-
-        // User *user = user_init();
-        // user->data->id = get_min_id(uhead);
-        // user->data->fd = new_fd;
-        // user->data->ip = userIP;
-        // add_user(uhead, user);
-
-        // ChatArgs *cargs = (ChatArgs *)malloc(sizeof(ChatArgs));
-        // cargs->socketFD = new_fd;
-        // cargs->user = user;
-        // cargs->uhead = uhead;
-
-        // pthread_t thread;
-        // if (pthread_create(&thread, NULL, chat_client, (void *)cargs) != 0)
-        // {
-        //     perror("pthread_create");
-        //     // close(new_fd);
-        //     free(cargs);
-        //     continue;
-        // }
-        // pthread_detach(thread);
-        // close(new_fd);
     }
-    // redisFree(redis); // 釋放連接
+    redisFree(redis); // close connect
     return 0;
 }

@@ -104,7 +104,6 @@ int get_min_id(User *head)
         cur = cur->next;
     }
     // record[cur->data->id] = 1;
-    printf("log cnt:%d\n", cnt);
     for (int idx = 0; idx < MAX_USER_ID; idx++)
     {
         if (!record[idx])

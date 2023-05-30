@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <hiredis/hiredis.h>
 
 #include "server_service.h"
 #include "server_controller.h"
@@ -15,5 +16,5 @@
 void *server_client(void *arg)
 {
     ServerArgs *sargs = (ServerArgs *)arg;
-    int login_status = login(sargs->socketFD);
+    int login_status = user_connect(sargs->socketFD, sargs->redis);
 }

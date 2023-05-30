@@ -8,20 +8,19 @@
 redisContext *connect_redis()
 {
     redisContext *redis = redisConnect("127.0.0.1", 6379);
+
     if (redis == NULL || redis->err)
     {
         if (redis)
         {
-            printf("connect redis fail: %s\n", redis->errstr);
+            printf("Error connecting to Redis: %s\n", redis->errstr);
             redisFree(redis);
-            exit(1);
         }
         else
         {
-            printf("cann't connect with redis\n");
-            exit(1);
+            printf("Failed to allocate Redis context\n");
         }
+        return NULL;
     }
-    printf("connect success.\n");
     return redis;
 }
