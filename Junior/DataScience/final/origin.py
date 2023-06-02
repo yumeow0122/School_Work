@@ -81,36 +81,3 @@ y_prediction_rf = regressor.predict(X_test)
 RMSE_rf = sqrt(mean_squared_error(y_test, y_prediction_rf))
 print("Random Forest RMSE:", RMSE_rf)
 print("Random Forest Accuracy:", accuracy_score(y_test, np.round(y_prediction_rf)))
-
-
-# Improve with one accaratcy
-print("===== One Accuracy =====")
-util.one_accuracy(y_prediction_lr, y_test)
-util.one_accuracy(y_prediction_dt, y_test)
-util.one_accuracy(y_prediction_rf, y_test)
-
-#Confussion Matrix for the Linear Regression Model
-label_aux = plt.subplot()
-cm_linear_regression = confusion_matrix(y_test,y_prediction_lr)
-
-
-#Confussion Matrix for the Decission Tree Regression Model
-label_aux = plt.subplot()
-cm_decision_tree_regression = confusion_matrix(y_test,y_prediction_dt)
-
-
-#Confussion Matrix for the Random Forest Regression Model
-label_aux = plt.subplot()
-cm_random_forest_regression = confusion_matrix(y_test,np.round(y_prediction_rf))
-
-RMSE_lr = sqrt(mean_squared_error(y_test, y_prediction_lr))
-print("RMSE for Linear Regression is:", RMSE_lr)
-print("New Linear Regression Accuracy:", accuracy_score(y_test, np.round(y_prediction_lr)))
-
-RMSE_dt = sqrt(mean_squared_error(y_test, y_prediction_dt))
-print("RMSE for Decision Tree Regression is:", RMSE_dt)
-print("New Decision Tree Accuracy:", accuracy_score(y_test, np.round(y_prediction_dt)))
-
-RMSE_rf = sqrt(mean_squared_error(y_test, y_prediction_rf))
-print("RMSE for Random Forest Regression is:", RMSE_rf)
-print("New Random Forest Accuracy:", accuracy_score(y_test, np.round(y_prediction_rf)))
