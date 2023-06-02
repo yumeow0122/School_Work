@@ -33,7 +33,6 @@ data['up_down'] = util.data_marking(data)
 ta_list = ['MACD','RSI','MOM','STOCH', 'CCI', 'ROC', 'OBV', 'ATR', 'ADX', 'SUB', 'SMA', 
            'EMA', 'WMA', 'DEMA', 'TEMA', 'TRIMA', 'KAMA', 'MAMA', 'T3', 'MACD_HIST', 'DX', 'TRIX',
            'TSF', 'STDDEV', 'MIDPOINT', 'MIDPRICE', 'SAR', 'BETA', 'LINEARREG', 'LINEARREG_ANGLE']
-print(talib.get_functions())
 indicator_data = util.generate_indicate(data, ta_list)
 
 # concat data and indicator_data and drop NaN
@@ -65,54 +64,14 @@ RMSE_rf = sqrt(mean_squared_error(y_test, y_prediction_lr))
 print("Linear Regression RMSE:", RMSE_rf)
 print("Linear Regression Accuracy:", accuracy_score(y_test, np.round(y_prediction_lr)))
 
-#Decision Tree
-regressor = DecisionTreeRegressor(random_state=0)
-regressor.fit(X_train, y_train)
-y_prediction_dt = regressor.predict(X_test)
-y_prediction_dt = np.round(y_prediction_dt)
-
-RMSE_rf = sqrt(mean_squared_error(y_test, y_prediction_dt))
-print("Decision Tree RMSE:", RMSE_rf)
-print("Decision Tree Accuracy:", accuracy_score(y_test, np.round(y_prediction_dt)))
-
-# Random Forest
-regressor = RandomForestRegressor(n_estimators=100, random_state=0)
-regressor.fit(X_train, y_train)
-y_prediction_rf = regressor.predict(X_test)
-
-RMSE_rf = sqrt(mean_squared_error(y_test, y_prediction_rf))
-print("Random Forest RMSE:", RMSE_rf)
-print("Random Forest Accuracy:", accuracy_score(y_test, np.round(y_prediction_rf)))
-
-
 # Improve with one accaratcy
 print("===== One Accuracy =====")
 util.one_accuracy(y_prediction_lr, y_test)
-util.one_accuracy(y_prediction_dt, y_test)
-util.one_accuracy(y_prediction_rf, y_test)
 
 #Confussion Matrix for the Linear Regression Model
 label_aux = plt.subplot()
 cm_linear_regression = confusion_matrix(y_test,y_prediction_lr)
 
-
-#Confussion Matrix for the Decission Tree Regression Model
-label_aux = plt.subplot()
-cm_decision_tree_regression = confusion_matrix(y_test,y_prediction_dt)
-
-
-#Confussion Matrix for the Random Forest Regression Model
-label_aux = plt.subplot()
-cm_random_forest_regression = confusion_matrix(y_test,np.round(y_prediction_rf))
-
 RMSE_lr = sqrt(mean_squared_error(y_test, y_prediction_lr))
 print("RMSE for Linear Regression is:", RMSE_lr)
 print("New Linear Regression Accuracy:", accuracy_score(y_test, np.round(y_prediction_lr)))
-
-RMSE_dt = sqrt(mean_squared_error(y_test, y_prediction_dt))
-print("RMSE for Decision Tree Regression is:", RMSE_dt)
-print("New Decision Tree Accuracy:", accuracy_score(y_test, np.round(y_prediction_dt)))
-
-RMSE_rf = sqrt(mean_squared_error(y_test, y_prediction_rf))
-print("RMSE for Random Forest Regression is:", RMSE_rf)
-print("New Random Forest Accuracy:", accuracy_score(y_test, np.round(y_prediction_rf)))
