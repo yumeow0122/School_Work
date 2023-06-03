@@ -7,6 +7,8 @@
 typedef struct DbArgs
 {
     int socketFD;
+    User *uhead;
+    User *user;
 } DbArgs;
 
 /**

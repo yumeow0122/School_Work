@@ -7,9 +7,10 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
+#include "chat_utils.h"
 #include "shell_service.h"
 #include "chat_service.h"
-#include "command_controller.h"
+#include "shell_utils.h"
 #include "user_controller.h"
 #include "pipe_controller.h"
 

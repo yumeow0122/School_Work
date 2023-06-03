@@ -40,25 +40,3 @@ char *int_to_str(int n)
 
     return s;
 }
-
-void crlf_to_lf(char *str)
-{
-    char *p = str;
-    char *q = str;
-    while (*p)
-    {
-        if (*p == '\r' && *(p + 1) == '\n')
-        {
-            p++;
-        }
-        *q++ = *p++;
-    }
-    *q = '\0';
-}
-
-char *get_ip_port(char *ip, char *port)
-{
-    strcat(ip, ":");
-    strcat(ip, port);
-    return ip;
-}

@@ -1,21 +1,54 @@
 #ifndef CHAT_SERVICE_H_INCLUDED
 #define CHAT_SERVICE_H_INCLUDED
 
-#define MAX_INPUT_SIZE 1024
-/**
- * @brief: send message to user
- * @param fd: socket file descriptor
- * @param msg: message to send
- * @return: void
- **/
-void send_msg(int fd, char *msg);
+#include "user_controller.h"
+#include "shell_utils.h"
 
 /**
- * @brief: receive message from user
- * @param fd: socket file descriptor
- * @param msg: message to receive
+ * @brief: chat service
+ * @param arg: chat arguments
  * @return: void
  **/
-void recv_msg(int fd, char *msg);
+void *chat_client(void *arg);
+
+
+/**
+ * @brief display the current user
+ * @param uhead: user list head
+ * @param user: current user
+ * @param socketFD: socket file descriptor
+ * @return void
+ **/
+void who(User *uhead, User *user, int socketFD);
+
+/**
+ * @brief change the current user's name
+ * @param uhead: user list head
+ * @param user: current user
+ * @param socketFD: socket file descriptor
+ * @param newName: new name
+ * @return void
+ **/
+void name(User *uhead, User *user, int socketFD, char *newName);
+
+/**
+ * @brief tell message to user
+ * @param uhead: user list head
+ * @param user: current user
+ * @param socketFD: socket file descriptor
+ * @param cmd: command
+ * @return void
+ **/
+void tell(User *uhead, User *user, int socketFD, Command *cmd);
+
+/**
+ * @brief yell message to all users
+ * @param uhead: user list head
+ * @param user: current user
+ * @param socketFD: socket file descriptor
+ * @param cmd: command
+ * @return void
+ **/
+void yell(User *uhead, User *user, int socketFD, Command *cmd);
 
 #endif // CHAT_SERVICE_H_INCLUDED

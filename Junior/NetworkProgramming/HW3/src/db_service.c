@@ -3,17 +3,20 @@
 #include <string.h>
 #include <hiredis/hiredis.h>
 
+#include "chat_service.h"
 #include "db_api.h"
 #include "db_service.h"
-#include "utils.h"
-#include "chat_service.h"
+#include "user_controller.h"
 
 void *db_client(void *args)
 {
     DbArgs *dbArgs = (DbArgs *)args;
-    printf("DB service started.\n");
     redisContext *redis = connect_redis();
+
+    // login/register state
     user_login(redis, dbArgs->socketFD);
+    add_user(dbArgs->uhead, dbArgs->user);
+
     redisFree(redis);
 }
 
