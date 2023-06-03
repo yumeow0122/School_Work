@@ -11,54 +11,47 @@
 #include <pthread.h>
 #include <hiredis/hiredis.h>
 
-#include "util.h"
-#include "shell_service.h"
-#include "user_controller.h"
-#include "chat_controller.h"
-#include "server_controller.h"
-#include "command_controller.h"
-#include "redis_controller.h"
+#include "utils.h"
+#include "db_service.h"
 
 #define PORT 8888
 
-
 int main()
 {
-    int sockfd, new_fd;
+    int server_fd, user_fd;
     struct sockaddr_in my_addr;
     struct sockaddr_in their_addr;
     socklen_t sin_size;
 
-    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
         perror("socket");
         exit(1);
     }
-    redisContext *redis = connect_redis();
 
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(PORT);
     my_addr.sin_addr.s_addr = INADDR_ANY;
     memset(&(my_addr.sin_zero), '\0', 8);
 
-    if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) == -1)
+    if (bind(server_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) == -1)
     {
         perror("bind");
         exit(1);
     }
 
-    if (listen(sockfd, 10) == -1)
+    if (listen(server_fd, 10) == -1)
     {
         perror("listen");
         exit(1);
     }
 
     printf("Server started and listening on port %d...\n", PORT);
-    User *uhead = user_init();
+
     while (1)
     {
         sin_size = sizeof(struct sockaddr_in);
-        if ((new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size)) == -1)
+        if ((user_fd = accept(server_fd, (struct sockaddr *)&their_addr, &sin_size)) == -1)
         {
             perror("accept");
             continue;
@@ -68,28 +61,20 @@ int main()
         char *_userPort = int_to_str(ntohs(their_addr.sin_port));
         char *userIP = get_ip_port(_userIP, _userPort);
 
-        printf("New client try to connected from %s\n", userIP);
+        printf("New client connected from %s\n", userIP);
 
-        User *user = user_init();
-        user->data->id = get_min_id(uhead);
-        user->data->fd = new_fd;
-        user->data->ip = userIP;
-
-        ServerArgs *sargs = (ServerArgs *)malloc(sizeof(ServerArgs));
-        sargs->socketFD = new_fd;
-        sargs->user = user;
-        sargs->uhead = uhead;
-        sargs->redis = redis;
         pthread_t thread;
-        if (pthread_create(&thread, NULL, server_client, (void *)sargs) != 0)
+        DbArgs *dbArgs = (DbArgs *)malloc(sizeof(DbArgs));
+        dbArgs->socketFD = user_fd;
+        if (pthread_create(&thread, NULL, db_client, (void *)dbArgs) != 0)
         {
             perror("pthread_create");
-            // close(new_fd);
-            free(sargs);
+            close(user_fd);
+            free(dbArgs);
             continue;
         }
         pthread_detach(thread);
     }
-    redisFree(redis); // close connect
+
     return 0;
 }
