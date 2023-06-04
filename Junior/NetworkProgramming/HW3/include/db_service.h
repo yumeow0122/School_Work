@@ -4,6 +4,9 @@
 #define MAX_USERNAME_LEN 32
 #define MAX_PASSWORD_LEN 32
 
+#include <hiredis/hiredis.h>
+#include "chat_service.h"
+
 typedef struct DbArgs
 {
     int socketFD;
@@ -26,9 +29,9 @@ redisContext *connect_redis();
 /**
  * @brief user login function
  * @param redis redis context
- * @return void
+ * @return username if login success, NULL if failed to execute command
  **/
-void user_login(redisContext *redis, int socketFD);
+char *user_login(redisContext *redis, int socketFD);
 
 /**
  * @brief user login function
@@ -47,4 +50,41 @@ int login_account(redisContext *redis, const char *username, const char *passwor
  * @return 1 if register success, 0 if account already exists, -1 if failed to execute command
  **/
 int register_account(redisContext *redis, const char *username, const char *password);
+
+/**
+ * @brief mail to specific user
+ * @param redis redis context
+ * @param sender sender
+ * @param receiver receiver
+ * @param message message
+ * @return void
+ **/
+void mailto(int userfd, char *sender, Command *cmd);
+
+/**
+ * @brief list mail box of specific user
+ * @param redis redis context
+ * @param name username
+ * @return void
+ **/
+void listMail(int userfd, char *username);
+
+/**
+ * @brief delete mail of specific id
+ * @param redis redis context
+ * @param name username
+ * @param cmd command
+ * @return void
+ **/
+void delMail(int userfd, char *username, Command *cmd);
+
+void createGroup(int userfd, char *username, char *groupName);
+
+void delGroup(int userfd, char *username, char *groupName);
+
+void listGroup(int userfd, char *username);
+
+void leaveGroup(int sockfd, char *username, char *groupName);
+
+void addTo(int sockfd, char *username, Command *cmd);
 #endif // DB_SERVICE_H_INCLUDED

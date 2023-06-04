@@ -50,4 +50,6 @@ void crlf_to_lf(char *str)
         *q++ = *p++;
     }
     *q = '\0';
+    q--;
+    *q = '\0';
 }

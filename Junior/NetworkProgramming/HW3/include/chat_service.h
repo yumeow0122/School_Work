@@ -4,6 +4,8 @@
 #include "user_controller.h"
 #include "shell_utils.h"
 
+#define MAX_MAIL_LEN 1024
+
 /**
  * @brief: chat service
  * @param arg: chat arguments

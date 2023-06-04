@@ -98,19 +98,15 @@ int get_min_id(User *head)
     User *cur = head->next;
     while (cur != head)
     {
-        printf("log uid:%d\n", cur->data->id);
         record[cur->data->id] = 1;
         cnt++;
         cur = cur->next;
     }
-    // record[cur->data->id] = 1;
-    printf("log cnt:%d\n", cnt);
     for (int idx = 0; idx < MAX_USER_ID; idx++)
     {
         if (!record[idx])
             return idx;
     }
-    printf("bound\n");
     return cnt; // out of bound
 }
 

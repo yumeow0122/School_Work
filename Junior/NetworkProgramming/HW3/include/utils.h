@@ -8,4 +8,10 @@
  **/
 char *int_to_str(int n);
 
+/**
+ * @brief Convert a string to an int
+ * @param The string to be converted
+ * @return The int converted from the string
+ **/
+int str_to_int(char *s);
 #endif // UTILS_H_INCLUDED

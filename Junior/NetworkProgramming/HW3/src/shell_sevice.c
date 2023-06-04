@@ -13,6 +13,7 @@
 #include "shell_utils.h"
 #include "user_controller.h"
 #include "pipe_controller.h"
+#include "db_service.h"
 
 int shell(User *uhead, User *user, char *input, char *output, int fd)
 {
@@ -54,6 +55,46 @@ int shell(User *uhead, User *user, char *input, char *output, int fd)
         else if (strcmp(cmd->args[0], "yell") == 0)
         {
             yell(uhead, user, fd, cmd);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "mailto") == 0)
+        {
+            mailto(fd, user->data->name, cmd);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "listMail") == 0)
+        {
+            listMail(fd, user->data->name);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "delMail") == 0)
+        {
+            delMail(fd, user->data->name, cmd);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "createGroup") == 0)
+        {
+            createGroup(fd, user->data->name, cmd->args[1]);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "delGroup") == 0)
+        {
+            delGroup(fd, user->data->name, cmd->args[1]);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "listGroup") == 0)
+        {
+            listGroup(fd, user->data->name);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "leaveGroup") == 0)
+        {
+            leaveGroup(fd, user->data->name, cmd->args[1]);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "addTo") == 0)
+        {
+            addTo(fd, user->data->name, cmd);
             break;
         }
         else if (cmd->args[0][0] == '|')

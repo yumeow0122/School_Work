@@ -40,3 +40,22 @@ char *int_to_str(int n)
 
     return s;
 }
+
+int str_to_int(char *s)
+{
+    int n = 0, sign = 1;
+
+    if (*s == '-')
+    {
+        sign = -1;
+        s++;
+    }
+
+    while (*s != '\0')
+    {
+        n = n * 10 + *s - '0';
+        s++;
+    }
+
+    return n * sign;
+}
