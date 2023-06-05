@@ -59,7 +59,7 @@ int register_account(redisContext *redis, const char *username, const char *pass
  * @param message message
  * @return void
  **/
-void mailto(int userfd, char *sender, Command *cmd);
+void mailto(User *uhead, User *user, int userfd, char *sender, Command *cmd);
 
 /**
  * @brief list mail box of specific user
@@ -79,6 +79,8 @@ void listMail(int userfd, char *username);
 void delMail(int userfd, char *username, Command *cmd);
 
 void createGroup(int userfd, char *username, char *groupName);
+
+void gyell(User *user, int userfd, char *username, char *groupName, Command *cmd);
 
 void delGroup(int userfd, char *username, char *groupName);
 

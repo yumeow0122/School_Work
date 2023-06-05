@@ -14,4 +14,6 @@ char *int_to_str(int n);
  * @return The int converted from the string
  **/
 int str_to_int(char *s);
+
+void removeFirstCharacter(char *str);
 #endif // UTILS_H_INCLUDED

@@ -59,3 +59,11 @@ int str_to_int(char *s)
 
     return n * sign;
 }
+
+void removeFirstCharacter(char *str) {
+    int i = 0;
+    while (str[i] != '\0') {
+        str[i] = str[i+1]; // 將後一個字元往前移動
+        i++;
+    }
+}

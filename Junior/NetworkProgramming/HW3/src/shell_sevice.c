@@ -59,7 +59,7 @@ int shell(User *uhead, User *user, char *input, char *output, int fd)
         }
         else if (strcmp(cmd->args[0], "mailto") == 0)
         {
-            mailto(fd, user->data->name, cmd);
+            mailto(uhead, user, user->data->fd, user->data->name, cmd);
             break;
         }
         else if (strcmp(cmd->args[0], "listMail") == 0)
@@ -70,6 +70,11 @@ int shell(User *uhead, User *user, char *input, char *output, int fd)
         else if (strcmp(cmd->args[0], "delMail") == 0)
         {
             delMail(fd, user->data->name, cmd);
+            break;
+        }
+        else if (strcmp(cmd->args[0], "gyell") == 0)
+        {
+            gyell(uhead, fd, user->data->name, cmd->args[1], cmd);
             break;
         }
         else if (strcmp(cmd->args[0], "createGroup") == 0)

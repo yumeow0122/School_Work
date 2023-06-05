@@ -19,6 +19,7 @@
 #include <time.h>
 #include <pthread.h>
 
+#include "utils.h"
 #include "shell_service.h"
 #include "chat_service.h"
 #include "chat_utils.h"
@@ -172,7 +173,7 @@ int register_account(redisContext *redis, const char *username, const char *pass
     return 1;
 }
 
-void mailto(int userfd, char *sender, Command *cmd)
+void mailto(User *uhead, User *user, int userfd, char *sender, Command *cmd)
 {
     char *receiver = cmd->args[1];
     char *message = malloc(sizeof(char) * 1024);
@@ -200,9 +201,15 @@ void mailto(int userfd, char *sender, Command *cmd)
     strftime(current_time, sizeof(current_time), "%Y-%m-%d %H:%M:%S", tm);
 
     // output redirect
+    int redirect = 0;
+    char *output = (char *)malloc(sizeof(char) * 256);
     if (message[0] == '<')
     {
-        printf("do it later QQ\n");
+        redirect = 1;
+        removeFirstCharacter(message);
+        printf("message: %s\n", message);
+        int state = shell(uhead, user, message, output, userfd);
+        printf("state: %s\n", output);
     }
 
     char *identifier = (char *)malloc(sizeof(char) * 256);
@@ -216,6 +223,8 @@ void mailto(int userfd, char *sender, Command *cmd)
     freeReplyObject(reply);
 
     char *buffer = (char *)malloc(sizeof(char) * 1024);
+    if (redirect == 1)
+        strcpy(message, output);
     sprintf(buffer, " %lld\t%s   %s \t\t%s\n", id, current_time, sender, message);
 
     reply = redisCommand(redis, "LPUSH %s %s", identifier, buffer);
@@ -334,9 +343,8 @@ void delGroup(int userfd, char *username, char *groupName)
     {
         if (reply->elements == 0)
         {
-            char msg[] = "Group not found !\n";
-            send_msg(userfd, msg);
-            // write(userfd, msg, strlen(msg));
+            char group_not_found[] = "Group not found !\n";
+            send_msg(userfd, group_not_found);
             freeReplyObject(reply);
             return;
         }
@@ -346,7 +354,6 @@ void delGroup(int userfd, char *username, char *groupName)
             redisReply *tr = redisCommand(redis, "DEL %s", groupName);
             char msg[] = "Group delete success !\n";
             send_msg(userfd, msg);
-            // write(userfd, msg, strlen(msg));
             freeReplyObject(tr);
 
             tr = redisCommand(redis, "ZREM groupList %s", groupName);
@@ -356,10 +363,49 @@ void delGroup(int userfd, char *username, char *groupName)
         {
             char msg[] = "You don't have permissions !\n";
             send_msg(userfd, msg);
-            // write(userfd, msg, strlen(msg));
         }
     }
     freeReplyObject(reply);
+}
+
+void gyell(User *uhead, int userfd, char *username, char *groupName, Command *cmd)
+{
+    redisContext *redis = connect_redis();
+    redisReply *reply = redisCommand(redis, "ZSCAN groupList 0 match %s", groupName);
+    if (!reply->element[1]->element)
+    {
+        char msg[] = "Group not found !\n";
+        send_msg(userfd, msg);
+        freeReplyObject(reply);
+        return;
+    }
+
+    char *message = malloc(sizeof(char) * 1024);
+    for (int idx = 2; idx < cmd->argc; idx++)
+    {
+        strcat(message, cmd->args[idx]);
+        strcat(message, " ");
+    }
+
+    reply = redisCommand(redis, "ZRANGE %s 0 -1", groupName);
+    if (reply->type == REDIS_REPLY_ARRAY)
+    {
+        for (int i = 0; i < reply->elements; i++)
+        {
+            User *cur = uhead->next;
+            while (cur != uhead)
+            {
+                if (strcmp(cur->data->name, reply->element[i]->str) == 0)
+                {
+                    char *to_send = malloc(sizeof(char) * 2048);
+                    sprintf(to_send, "<%s-%s>: %s\n", groupName, username, message);
+                    send_msg(cur->data->fd, to_send);
+                }
+
+                cur = cur->next;
+            }
+        }
+    }
 }
 
 void listGroup(int sockfd, char *username)
