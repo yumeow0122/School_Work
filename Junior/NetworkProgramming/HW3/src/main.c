@@ -24,7 +24,7 @@
 #include "db_service.h"
 #include "user_controller.h"
 
-#define PORT 8888
+#define PORT 8887
 
 int main()
 {
