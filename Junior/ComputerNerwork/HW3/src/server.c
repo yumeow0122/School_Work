@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "server_connect.h"
+#include "server.h"
 
 int server_connect()
 {

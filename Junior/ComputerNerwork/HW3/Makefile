@@ -1,42 +1,23 @@
 CC = gcc
-
-CFLAGS = -Wno-implicit-function-declaration -g -MD
-LFLAGS = -lreadline
+CFLAGS = -Wno-implict-function-declearation -g -MD
+LFLAGS =  -lhiredis -lpthread
 INC = -Iinclude
 
-SRCS = ${wildcard src/*.c}
-OBJS = ${patsubst src/%.c, obj/%.o, ${SRCS}}
-DEPENDS = ${wildcard include/*.h}
-DEPS := ${OBJS:.o=.d}
+SRCS = $(wildcard src/*.c)
+OBJS = $(patsubst src/%.c, obj/%.o, $(SRCS))
 
--include ${DEPS}
+.PHONY: depend clean all
+DEPS:= $(OBJS:.o=.d)
 
-.PHONY: clean all exec test doitall
+all: main
 
-shell: $(OBJS)
-	$(CC) $^ -o bin/$@ -lpthread
-	cp ./bin/shell ./
-	rm ./bin/shell
+-include $(DEPS)
 
-obj/%.o: src/%.c
-	$(CC) $(CFLAG) $(INC) -c -o $@ $<
+main: $(OBJS)
+	@$(CC) $^ -o $@ $(LFLAGS)
 
-# .PHONY
-all:
-	shell
+obj/%.o:src/%.c
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
-	rm -f obj/*.o obj/*.d
-
-exec:
-	./shell
-
-test:
-	./bin/number
-
-doitall:
-	make clean
-	make
-	make exec
-	make clean
-	rm ./shell
+	@rm obj/*.o obj/*.d ./main
