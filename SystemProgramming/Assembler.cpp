@@ -64,7 +64,7 @@ public:
   }
 
   string getOpcode(string ins){
-    if(opcode.find(ins) == opcode.end())    //¨S§ä¨ì
+    if(opcode.find(ins) == opcode.end())    //ï¿½Sï¿½ï¿½ï¿½
       return "-1";
 
     return opcode[ins];
@@ -274,11 +274,6 @@ private:
 
       cout << instruction[i].address << " " << instruction[i].label << " "
               << instruction[i].operation << " " << instruction[i].target << endl;
-
-      /*cout << "address: "<< instruction[i].address << endl;
-      cout << "label: " << instruction[i].label << endl;
-      cout << "operation: "<< instruction[i].operation << endl;
-      cout << "target: " << instruction[i].target << endl;*/
     }
   }
 
