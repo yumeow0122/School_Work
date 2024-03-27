@@ -133,11 +133,11 @@ class NeuralNet(nn.Module):
         # Define your neural network here
         # TODO: How to modify this model to achieve better performance?
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 32),
-            nn.BatchNorm1d(32),#使用BN，加速模型训练
-            nn.Dropout(p=0.2),#使用Dropout，减小过拟合，注意不能在BN之前
-            nn.LeakyReLU(),#更换激活函数
-            nn.Linear(32, 1)
+            nn.Linear(input_dim, 64),
+            nn.ReLU(),
+            nn.Linear(64, 16),
+            nn.ReLU(),
+            nn.Linear(16, 1)
         )
 
         # Mean squared error loss
@@ -151,7 +151,7 @@ class NeuralNet(nn.Module):
     def cal_loss(self, pred, target):
         ''' Calculate loss '''
         regularization_loss = 0
-        for param in self.parameters():  # 使用 self.parameters() 而不是 model.parameters()
+        for param in self.parameters():
             # TODO: you may implement L1/L2 regularization here
             # 使用L2正则项
             regularization_loss += torch.sum(param ** 2)
