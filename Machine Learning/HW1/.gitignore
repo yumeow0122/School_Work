@@ -1,2 +1,6 @@
 data/*.csv
 images/*.png
+
+*.pyc
+__pycache__/
+module/__pycache__/
