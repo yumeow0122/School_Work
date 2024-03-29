@@ -29,13 +29,12 @@ target_only = True                   # 使用前面设置的特征
 
 # TODO: How to tune these hyper-parameters to improve your model's performance?
 config = {
-    'n_epochs': 10000,                # 因为有early_stop，所以大一点没有影响
-    'batch_size': 200,               # 微调batchsize
+    'n_epochs': 5000,                # 因为有early_stop，所以大一点没有影响
+    'batch_size': 100,               # 微调batchsize
     'optimizer': 'Adam',              # 使用Adam优化器
     'optim_hparas': {                # 完全使用默认参数
-        #'lr': 0.0001,                 
-        #'momentum': 0.9,             
-        #'weight_decay': 5e-4,
+        'lr': 0.0001,                 
+        'weight_decay': 1e-6,
     },
     'early_stop': 500,               # 由于最后训练使用了所有数据，大一点影响不大
     'save_path': 'models/model.pth'  
