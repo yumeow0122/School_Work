@@ -104,11 +104,11 @@ class MyModel(nn.Module):
         # Define your neural network here
         # TODO: How to modify this model to achieve better performance?
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 32),
-            nn.BatchNorm1d(32),#使用BN，加速模型训练
-            nn.Dropout(p=0.2),#使用Dropout，减小过拟合，注意不能在BN之前
-            nn.LeakyReLU(),#更换激活函数
-            nn.Linear(32, 1)
+            nn.Linear(input_dim, 64),
+            nn.ReLU(),
+            nn.Linear(64, 16),
+            nn.ReLU(),
+            nn.Linear(16, 1)
         )
 
         # Mean squared error loss

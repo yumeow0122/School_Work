@@ -68,7 +68,7 @@ class COVID19Dataset(Dataset):
         else:
             # TODO: Using 40 states & 2 tested_positive features (indices = 57 & 75)
             # feats = list(range(1, 41)) + [57, 75]
-            feats = [75, 57, 42, 60, 78, 43, 61, 79, 40, 58, 76, 41, 59, 77] #上面挑选的最优特征
+            feats = [44,45,46,47,48,49,50,51,52,53] #上面挑选的最优特征
         
         if mode == 'test':
             # Testing data
