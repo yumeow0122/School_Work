@@ -1,4 +1,6 @@
-data/*.csv
+data/covid.test.csv
+data/covid.train.csv
+
 images/*.png
 
 *.pyc

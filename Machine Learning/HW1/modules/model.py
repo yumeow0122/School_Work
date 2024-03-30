@@ -20,7 +20,7 @@ def train(tr_set, dv_set, model, config, device):
     # Setup optimizer
     optimizer = getattr(torch.optim, config['optimizer'])(
         model.parameters(), **config['optim_hparas'])
-
+    
     min_mse = 1000.
     loss_record = {'train': [], 'dev': []}      # for recording training loss
     early_stop_cnt = 0
@@ -119,12 +119,24 @@ class MyModel(nn.Module):
         ''' Given input of size (batch_size x input_dim), compute output of the network '''
         return self.net(x).squeeze(1)
 
+
     def cal_loss(self, pred, target):
-        ''' Calculate loss '''
+        ''' Calculate loss with L1 and L2 regularization '''
         regularization_loss = 0
+
+        # L1 regularization
+        l1_coeff = 0.001  # L1 regularization coefficient
         for param in self.parameters():
-        # TODO: you may implement L1/L2 regularization here
-        # 使用L2正则项
-            # regularization_loss += torch.sum(abs(param))
+            regularization_loss += torch.sum(torch.abs(param))
+
+        # L2 regularization
+        l2_coeff = 0.001  # L2 regularization coefficient
+        for param in self.parameters():
             regularization_loss += torch.sum(param ** 2)
-        return self.criterion(pred, target) + 0.00075 * regularization_loss
+
+        # Combine regularization terms with coefficients
+        loss = self.criterion(pred, target)
+        loss += l1_coeff * regularization_loss
+        loss += 0.5 * l2_coeff * regularization_loss  # 0.5 is used to prevent double-counting
+
+        return loss
