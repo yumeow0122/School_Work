@@ -1,1 +1,0 @@
-# Note of HW1
