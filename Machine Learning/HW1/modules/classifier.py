@@ -5,11 +5,11 @@ class CovidClassifier(nn.Module):
         super(CovidClassifier, self).__init__()
         # TODO: modify model's structure, be aware of dimensions. 
         self.layers = nn.Sequential(
-            nn.Linear(input_dim, 16),
-            nn.ReLU(),
-            nn.Linear(16, 8),
-            nn.ReLU(),
-            nn.Linear(8, 1)
+            nn.Linear(input_dim, 64),
+            nn.LeakyReLU(0.1)
+            nn.Linear(64, 16),
+            nn.LeakyReLU(0.1)
+            nn.Linear(16, 1)
         )
 
     def forward(self, x):
