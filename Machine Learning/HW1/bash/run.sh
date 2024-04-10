@@ -1,2 +1,1 @@
-#sudo docker run -it -v $(pwd):/app project
-sudo docker run -it -v "$(pwd)":/app project python main.py
+docker run -p 8888:8888 -v "$(pwd)":/app hw1

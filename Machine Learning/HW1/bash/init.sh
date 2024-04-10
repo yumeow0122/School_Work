@@ -1,1 +1,1 @@
-sudo docker build -t project .
+docker build -t hw1 .
