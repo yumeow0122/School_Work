@@ -1,5 +1,4 @@
-data/*.csv
-images/*.png
+data/
 
 *.pyc
 __pycache__/
