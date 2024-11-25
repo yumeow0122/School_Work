@@ -1,1 +1,0 @@
-sudo docker run -it -v $(pwd):/app project

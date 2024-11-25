@@ -1,8 +1,0 @@
-data/
-
-._Dataset
-Dataset/
-
-*.pyc
-__pycache__/
-module/__pycache__/
