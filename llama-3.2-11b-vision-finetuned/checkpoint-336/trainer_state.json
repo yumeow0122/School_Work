@@ -10,23 +10,23 @@
   "log_history": [
     {
       "epoch": 0.5934718100890207,
-      "grad_norm": 2.1633217334747314,
+      "grad_norm": 1.47439444065094,
       "learning_rate": 1.773422749654988e-05,
-      "loss": 2.6907,
+      "loss": 2.204,
       "step": 100
     },
     {
       "epoch": 1.1869436201780414,
-      "grad_norm": 1.313494086265564,
+      "grad_norm": 0.7063536643981934,
       "learning_rate": 8.445930745277953e-06,
-      "loss": 1.2205,
+      "loss": 0.6966,
       "step": 200
     },
     {
       "epoch": 1.7804154302670623,
-      "grad_norm": 1.3761262893676758,
+      "grad_norm": 0.8068556189537048,
       "learning_rate": 6.930734201451817e-07,
-      "loss": 0.9766,
+      "loss": 0.4809,
       "step": 300
     }
   ],
@@ -47,7 +47,7 @@
       "attributes": {}
     }
   },
-  "total_flos": 2.7499371664065396e+16,
+  "total_flos": 5.786630190939768e+16,
   "train_batch_size": 4,
   "trial_name": null,
   "trial_params": null
