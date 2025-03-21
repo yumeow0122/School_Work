@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gridmaster</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>The Gridmaster</h1>
+        
+        <div class="controls">
+            <label for="gridSize">Grid Size (5-9):</label>
+            <input type="number" id="gridSize" min="5" max="9" value="5">
+            <button id="createGridBtn" class="button">Create Grid</button>
+            <button id="evaluateBtn" class="button" disabled>Random Policy</button>
+        </div>
+        
+        <div class="status" id="statusText">
+            Please set grid size and create a grid to begin.
+        </div>
+        
+        <div class="grid-container" id="gridContainer"></div>
+        
+        <div class="edit-controls">
+            <button id="editBtn" class="button">Edit Grid</button>
+            <button id="clearBtn" class="button">Clear All</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/gridworld.js') }}"></script>
+</body>
+</html>
